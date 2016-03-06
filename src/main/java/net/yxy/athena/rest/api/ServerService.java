@@ -20,6 +20,7 @@ public class ServerService {
     @Path("list")
     @Produces(MediaType.APPLICATION_JSON)
 	public List<Server> listServers() {
+		System.out.println("------------->listServers()") ;
 		return cs.listServers() ;
 	}
 
