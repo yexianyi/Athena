@@ -1,7 +1,7 @@
 package net.yxy.athena.main;
 
-import net.yxy.athena.rest.api.ServerService;
-
+import java.net.URI;
+import java.net.URL;
 import java.util.Collections;
 
 import org.eclipse.jetty.security.ConstraintMapping;
@@ -10,15 +10,16 @@ import org.eclipse.jetty.security.HashLoginService;
 import org.eclipse.jetty.security.LoginService;
 import org.eclipse.jetty.security.authentication.BasicAuthenticator;
 import org.eclipse.jetty.server.Server;
+import org.eclipse.jetty.servlet.DefaultServlet;
 import org.eclipse.jetty.servlet.ServletContextHandler;
 import org.eclipse.jetty.servlet.ServletHolder;
+import org.eclipse.jetty.util.resource.Resource;
 import org.eclipse.jetty.util.security.Constraint;
-import org.eclipse.jetty.server.Server;
-import org.eclipse.jetty.servlet.ServletContextHandler;
-import org.eclipse.jetty.servlet.ServletHolder;
 import org.glassfish.jersey.jackson.JacksonFeature;
 import org.glassfish.jersey.server.ResourceConfig;
 import org.glassfish.jersey.servlet.ServletContainer;
+
+import net.yxy.athena.rest.api.ServerService;
 
 public class AppMain {
 
@@ -91,14 +92,38 @@ public class AppMain {
 		ServletContainer servletContainer = new ServletContainer(resourceConfig);
 		ServletHolder sh = new ServletHolder(servletContainer);
 		
+		URL url = AppMain.class.getClassLoader().getResource("html/");
+	    URI webRootUri = url.toURI();
+		
 		ServletContextHandler context = new ServletContextHandler(ServletContextHandler.SESSIONS);
 		context.setContextPath("/athena");
+		context.setBaseResource(Resource.newResource(webRootUri));
+	    context.setWelcomeFiles(new String[] { "index.html" });
 		context.addServlet(sh, "/*");
+		
+		ServletHolder holderPwd = new ServletHolder("default", DefaultServlet.class);
+	    holderPwd.setInitParameter("dirAllowed", "true");
+	    context.addServlet(holderPwd, "/");
+
+		
+		
 		
 		// Inject Security Handler into Context in order to secure REST Service
 		context.setHandler(security);
-		
 		server.setHandler(context);
+		
+		
+//		ResourceHandler resource_handler = new ResourceHandler();
+//	    resource_handler.setDirectoriesListed(true);
+//	    resource_handler.setWelcomeFiles(new String[]{ "index.html" });
+//
+//	    resource_handler.setResourceBase(".");
+//
+//	    HandlerList handlers = new HandlerList();
+//	    handlers.setHandlers(new Handler[] { resource_handler, new DefaultHandler() });
+//	    server.setHandler(handlers);
+		
+		
 
 		try {
 			server.start();
