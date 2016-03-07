@@ -11,7 +11,7 @@ import org.jclouds.openstack.nova.v2_0.domain.Server;
 
 import net.yxy.athena.service.server.ComputeService;
 
-@Path("/api/admin/server")
+@Path("/admin/server")
 public class ServerService {
 	
 	private ComputeService cs = new ComputeService() ;

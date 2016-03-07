@@ -20,6 +20,8 @@ public class AppMain2 {
 		WebAppContext webapp1 = new WebAppContext();
 		webapp1.setResourceBase("src/main/webapp");
 		webapp1.setContextPath("/athena");
+		// do not need webdefault.xml. If uncomment this line, this file will be
+		// load before each of web.xml files.
 //		webapp1.setDefaultsDescriptor("src/main/webdefault/webdefault.xml");
 		handlers.addHandler(webapp1);
 
