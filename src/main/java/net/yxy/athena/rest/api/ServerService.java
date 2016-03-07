@@ -11,7 +11,7 @@ import org.jclouds.openstack.nova.v2_0.domain.Server;
 
 import net.yxy.athena.service.server.ComputeService;
 
-@Path("/rest/admin/server")
+@Path("/api/admin/server")
 public class ServerService {
 	
 	private ComputeService cs = new ComputeService() ;
@@ -20,7 +20,6 @@ public class ServerService {
     @Path("list")
     @Produces(MediaType.APPLICATION_JSON)
 	public List<Server> listServers() {
-		System.out.println("------------->listServers()") ;
 		return cs.listServers() ;
 	}
 
