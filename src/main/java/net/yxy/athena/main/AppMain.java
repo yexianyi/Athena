@@ -45,8 +45,6 @@ public class AppMain {
 		//		Uses a JAAS provider for authentication, See the section on JAAS support for more information.
 		//		SpnegoLoginService
 		//		SPNEGO Authentication, See the section on SPNEGO support for more information.
-
-
         LoginService loginService = new HashLoginService("MyRealm", "src/main/resources/realm.properties");
         server.addBean(loginService);
         
