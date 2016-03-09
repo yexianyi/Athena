@@ -76,7 +76,7 @@ public class AppMain2 {
         // the chain.
         ConstraintSecurityHandler securityHandler = new ConstraintSecurityHandler();
 		securityHandler.setConstraintMappings(Collections.singletonList(mapping));
-		securityHandler.setAuthenticator(new FormAuthenticator("src/main/webapp/logon.html","src/main/webapp/logerror.html",false)); // BASIC/FORM AUTHMETHOD
+		securityHandler.setAuthenticator(new FormAuthenticator("/logon.html","/logerror.html",false)); // BASIC/FORM AUTHMETHOD
 		securityHandler.setLoginService(loginService);
 		
 		webapp1.setSecurityHandler(securityHandler);
