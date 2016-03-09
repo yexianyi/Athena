@@ -63,6 +63,11 @@
 		</dependency>
 		<dependency>
 			<groupId>org.eclipse.jetty</groupId>
+			<artifactId>jetty-security</artifactId>
+			<version>${jetty.version}</version>
+		</dependency>
+		<dependency>
+			<groupId>org.eclipse.jetty</groupId>
 			<artifactId>jetty-jmx</artifactId>
 			<version>${jetty.version}</version>
 		</dependency>
@@ -94,6 +99,13 @@
 			<artifactId>guava</artifactId>
 			<version>19.0</version>
 		</dependency>
+		
+		<dependency>
+			<groupId>org.slf4j</groupId>
+			<artifactId>slf4j-simple</artifactId>
+			<version>1.7.18</version>
+		</dependency>
+		
 
 		<dependency>
 			<groupId>junit</groupId>
@@ -103,18 +115,19 @@
 		</dependency>
 	</dependencies>
 	<build>
-	<!--  
 		<resources>
-	       <resource>
-	            <directory>src/main</directory>
-	       </resource>
-	    </resources>
-	    -->
+		    <resource>
+		        <directory>src/main/resources</directory>
+		    </resource>
+		    <resource>
+		        <directory>src/main/webapp</directory>
+		    </resource>
+		</resources>
 		<plugins>
 			<plugin>
 				<groupId>org.apache.maven.plugins</groupId>
 				<artifactId>maven-compiler-plugin</artifactId>
-				<version>3.1</version>
+				<version>3.5.1</version>
 				<configuration>
 					<source>${java.source.level}</source>
 					<target>${java.target.level}</target>
@@ -124,11 +137,25 @@
 				</configuration>
 			</plugin>
 			<plugin>
-				<artifactId>maven-assembly-plugin</artifactId>
+			    <groupId>org.apache.maven.plugins</groupId>
+			    <artifactId>maven-jar-plugin</artifactId>
+			    <version>2.4</version>
+			    <executions>
+			        <execution>
+			            <id>package-jar</id>
+			            <phase>package</phase>
+			            <goals>
+			                <goal>jar</goal>
+			            </goals>
+			        </execution>
+			    </executions>
+			</plugin>
+			<plugin>
+			    <artifactId>maven-assembly-plugin</artifactId>
 				<configuration>
 					<archive>
 						<manifest>
-							<mainClass>edomingues.restserver.Main</mainClass>
+							<mainClass>net.yxy.athena.main.AppMain3</mainClass>
 						</manifest>
 					</archive>
 					<descriptorRefs>
@@ -145,6 +172,21 @@
 					</execution>
 				</executions>
 			</plugin>
+			<plugin>
+			    <groupId>org.mortbay.jetty</groupId>
+		        <artifactId>maven-jetty-plugin</artifactId>
+		        <version>${jetty.version}</version>
+		        <!-- adding configuration below: -->
+		        <configuration>
+		            <userRealms>
+		                <userRealm implementation="org.mortbay.jetty.security.HashUserRealm">
+		                    <!-- this name must match the realm-name in web.xml -->
+		                    <name>MyRealm</name>
+		                    <config>src/main/resources/realm.properties</config>
+		                </userRealm>
+		            </userRealms>
+		        </configuration>
+		    </plugin>
 
 		</plugins>
 	</build>

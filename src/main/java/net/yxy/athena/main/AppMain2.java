@@ -7,10 +7,17 @@ import org.eclipse.jetty.security.ConstraintSecurityHandler;
 import org.eclipse.jetty.security.HashLoginService;
 import org.eclipse.jetty.security.LoginService;
 import org.eclipse.jetty.security.authentication.BasicAuthenticator;
+import org.eclipse.jetty.security.authentication.FormAuthenticator;
 import org.eclipse.jetty.server.Server;
 import org.eclipse.jetty.server.handler.HandlerCollection;
 import org.eclipse.jetty.util.security.Constraint;
 import org.eclipse.jetty.webapp.WebAppContext;
+
+/**
+ * This class shows how to configure Authentication in programming method.
+ * @author xianyiye
+ * 2016/03/09
+ */
 
 public class AppMain2 {
 
@@ -69,7 +76,7 @@ public class AppMain2 {
         // the chain.
         ConstraintSecurityHandler securityHandler = new ConstraintSecurityHandler();
 		securityHandler.setConstraintMappings(Collections.singletonList(mapping));
-		securityHandler.setAuthenticator(new BasicAuthenticator()); // BASIC AUTHMETHOD
+		securityHandler.setAuthenticator(new FormAuthenticator("src/main/webapp/logon.html","src/main/webapp/logerror.html",false)); // BASIC/FORM AUTHMETHOD
 		securityHandler.setLoginService(loginService);
 		
 		webapp1.setSecurityHandler(securityHandler);

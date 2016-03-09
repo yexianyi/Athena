@@ -23,22 +23,28 @@
 		<url-pattern>/api/*</url-pattern>
 	</servlet-mapping>
 
-<!-- 
-	<security-constraint>
+ 
+	<!-- <security-constraint>
 		<web-resource-collection>
 			<web-resource-name>ALL URLs</web-resource-name>
 			<url-pattern>/api/*</url-pattern>
 		</web-resource-collection>
 		<auth-constraint>
-			<role-name>ADMIN</role-name>
+			<role-name>admin</role-name>
 		</auth-constraint>
 	</security-constraint>
-
+	<security-role>
+	    <role-name>admin</role-name>
+	</security-role>
 
 	<login-config>
-		<auth-method>BASIC</auth-method>
-		<realm-name>default-realm</realm-name>
-	</login-config>
--->
+		<auth-method>FORM</auth-method>
+		<realm-name>MyRealm</realm-name>
+		<form-login-config>
+			<form-login-page>/logon.html?param=test</form-login-page>
+			<form-error-page>/logonError.html?param=test</form-error-page>
+		</form-login-config>
+	</login-config> -->
+
 
 </web-app>
