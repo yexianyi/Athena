@@ -1,4 +1,4 @@
-package net.yxy.athena.rest.api;
+package net.yxy.athena.rest;
 
 import java.util.List;
 
@@ -12,7 +12,7 @@ import org.jclouds.openstack.nova.v2_0.domain.Server;
 import net.yxy.athena.service.server.ComputeService;
 
 @Path("/admin/server")
-public class ServerService {
+public class ServerServiceApi {
 	
 	private ComputeService cs = new ComputeService() ;
 	

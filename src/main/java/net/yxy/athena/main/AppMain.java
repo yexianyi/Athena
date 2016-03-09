@@ -19,7 +19,7 @@ import org.glassfish.jersey.jackson.JacksonFeature;
 import org.glassfish.jersey.server.ResourceConfig;
 import org.glassfish.jersey.servlet.ServletContainer;
 
-import net.yxy.athena.rest.api.ServerService;
+import net.yxy.athena.rest.ServerServiceApi;
 
 public class AppMain {
 
@@ -84,7 +84,7 @@ public class AppMain {
         
 		// Binds REST Service classes
 		ResourceConfig resourceConfig = new ResourceConfig();
-		resourceConfig.packages(ServerService.class.getPackage().getName());
+		resourceConfig.packages(ServerServiceApi.class.getPackage().getName());
 		resourceConfig.register(JacksonFeature.class);
 		
 		ServletContainer servletContainer = new ServletContainer(resourceConfig);

@@ -1,5 +1,39 @@
 <html>
+<head>
+<script type="text/javascript" src="js/jquery-1.12.1.min.js"></script>
+<script type="text/javascript">
+$(document).ready(function(){
+	$('#click_btn').click(function(){ 
+		alert('Click');
+	});
+	
+	$('#ajax').click(function(){ 
+		alert('rest');
+		 $.ajax({ 
+            type: "GET",
+            dataType: "json",
+            url: "/athena/api/admin/server/list",
+            success: function(data){        
+               alert(data);
+            },
+	         error: function (msg, url, line) {
+	             alert('msg = ' + msg + ', url = ' + url + ', line = ' + line);
+	         }
+        }); 
+	});
+});
+
+</script>
+
+
+</head>
 <body>
-<h2>Hello 8888!</h2>
+	<h2>Athena Management</h2>
+
+	<button id="ajax">ajax call</button>
+	<button id="click_btn">Click</button>
+
 </body>
+
+
 </html>
