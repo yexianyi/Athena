@@ -17,6 +17,8 @@ package net.yxy.athena.main;
 
 import java.util.Collections;
 
+import net.yxy.athena.listener.InitApplication;
+
 import org.eclipse.jetty.security.ConstraintMapping;
 import org.eclipse.jetty.security.ConstraintSecurityHandler;
 import org.eclipse.jetty.security.HashLoginService;
@@ -46,7 +48,7 @@ public class AppMain2 {
 		WebAppContext webapp1 = new WebAppContext();
 		webapp1.setResourceBase("src/main/webapp");
 		webapp1.setContextPath("/athena");
-		
+		webapp1.addEventListener(new InitApplication());
 		
 		// Configure LoginService which is required by each context/webapp 
 		// that has a authentication mechanism, which is used to check the 

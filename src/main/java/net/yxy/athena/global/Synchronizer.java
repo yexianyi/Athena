@@ -3,23 +3,47 @@ package net.yxy.athena.global;
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 public final class Synchronizer extends Thread{
+	static private Logger logger = LoggerFactory.getLogger(Synchronizer.class); 
 	
+	private volatile static Synchronizer instance;
 	private volatile static String hashtext;
 	private static final int interval = 3000 ;
+	private volatile boolean isInterrupted = false ;
 
 	private Synchronizer() {
 	}
 	
+
+	public static Synchronizer createInstance() {
+		if (instance == null) {
+			synchronized (Synchronizer.class) {
+				if (instance == null){
+					instance = new Synchronizer();
+				}
+			}
+		}
+		return instance;
+	}
+	
+	
 	public static String getCurrent(){
 		return hashtext;
 	}
-
+	
+	public boolean shutdown(){
+		isInterrupted = true ;
+		return this.isAlive() ;
+	}
+	
 	    
 	@Override
 	public void run() {
 		super.run();
-		while(!isInterrupted()){
+		while(!isInterrupted() && !isInterrupted){
 			try {
 	            MessageDigest md = MessageDigest.getInstance("MD5");
 	            byte[] bytes = String.valueOf(System.currentTimeMillis()).getBytes() ;
@@ -31,6 +55,7 @@ public final class Synchronizer extends Thread{
 	    		}
 	            
 	    		hashtext = sb.toString().substring(8, 24);  ;
+	    		logger.debug(hashtext);
 	    		
 	    		Thread.sleep(interval);
 	        }
