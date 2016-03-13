@@ -30,6 +30,7 @@ import org.jclouds.openstack.nova.v2_0.domain.Server;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import net.yxy.athena.global.Constants;
 import net.yxy.athena.service.server.ComputeService;
 
 @Path("/admin/server")
@@ -55,9 +56,9 @@ public class ServerServiceApi {
 //		response.expires(expirationDate);
 		
 		///////////////HTTP Cache by Duration////////////////
-//		CacheControl cc = new CacheControl() ;
-//		cc.setMaxAge(1000*60);
-//		response.cacheControl(cc) ;
+		CacheControl cc = new CacheControl() ;
+		cc.setMaxAge(Constants.REFRESH_INTERVAL);
+		response.cacheControl(cc) ;
 		
 		
 		///////////////HTTP Cache by E-tag////////////////

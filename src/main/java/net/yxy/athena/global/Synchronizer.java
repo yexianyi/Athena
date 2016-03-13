@@ -11,7 +11,6 @@ public final class Synchronizer extends Thread{
 	
 	private volatile static Synchronizer instance;
 	private volatile static String hashtext;
-	private static final int interval = 3000 ;
 	private volatile boolean isInterrupted = false ;
 
 	private Synchronizer() {
@@ -57,7 +56,7 @@ public final class Synchronizer extends Thread{
 	    		hashtext = sb.toString().substring(8, 24);  ;
 	    		logger.debug(hashtext);
 	    		
-	    		Thread.sleep(interval);
+	    		Thread.sleep(Constants.REFRESH_INTERVAL);
 	        }
 	        catch (NoSuchAlgorithmException e) {
 	            throw new RuntimeException(e);

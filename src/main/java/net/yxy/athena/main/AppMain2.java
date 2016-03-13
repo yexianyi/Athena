@@ -48,7 +48,9 @@ public class AppMain2 {
 		WebAppContext webapp1 = new WebAppContext();
 		webapp1.setResourceBase("src/main/webapp");
 		webapp1.setContextPath("/athena");
-		webapp1.addEventListener(new InitApplication());
+		
+		// Init global functional features
+//		webapp1.addEventListener(new InitApplication());
 		
 		// Configure LoginService which is required by each context/webapp 
 		// that has a authentication mechanism, which is used to check the 
