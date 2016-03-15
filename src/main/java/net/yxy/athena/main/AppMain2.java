@@ -63,29 +63,9 @@ public class AppMain2 {
         // those connectors.
 		Server server = new Server();
 		
-		
-		// HTTP Configuration
-        // HttpConfiguration is a collection of configuration information
-        // appropriate for http and https. The default scheme for http is
-        // <code>http</code> of course, as the default for secured http is
-        // <code>https</code> but we show setting the scheme to show it can be
-        // done. The port for secured communication is also set here.
-        HttpConfiguration http_config = new HttpConfiguration();
-        http_config.setSecureScheme("https");
-        http_config.setSecurePort(8443);
-        http_config.setOutputBufferSize(32768);
-        
-        
-        // HTTP connector
-        // The first server connector we create is the one for http, passing in
-        // the http configuration we configured above so it can get things like
-        // the output buffer size, etc. We also set the port (8080) and
-        // configure an idle timeout.
-        ServerConnector http = new ServerConnector(server, new HttpConnectionFactory(http_config));
-        http.setPort(8080);
-        http.setIdleTimeout(30000);
-        
-        
+		HttpConfiguration https = new HttpConfiguration();
+	    https.addCustomizer(new SecureRequestCustomizer());
+	    
         // SSL Context Factory for HTTPS
         // SSL requires a certificate so we configure a factory for ssl contents
         // with information pointing to what keystore the ssl connection needs
@@ -96,28 +76,11 @@ public class AppMain2 {
         sslContextFactory.setKeyStorePath(keystoreFile.getAbsolutePath());
         sslContextFactory.setKeyStorePassword("OBF:19iy19j019j219j419j619j8"); //123456
         sslContextFactory.setKeyManagerPassword("OBF:19iy19j019j219j419j619j8"); //123456
-		
-        
-        // HTTPS Configuration
-        // A new HttpConfiguration object is needed for the next connector and
-        // you can pass the old one as an argument to effectively clone the
-        // contents. On this HttpConfiguration object we add a
-        // SecureRequestCustomizer which is how a new connector is able to
-        // resolve the https connection before handing control over to the Jetty
-        // Server.
-        HttpConfiguration https_config = new HttpConfiguration(http_config);
-        https_config.addCustomizer(new SecureRequestCustomizer());
- 
-        
-        // HTTPS connector
-        // We create a second ServerConnector, passing in the http configuration
-        // we just made along with the previously created ssl context factory.
-        // Next we set the port and a longer idle timeout.
-        ServerConnector https = new ServerConnector(server,
-            new SslConnectionFactory(sslContextFactory,HttpVersion.HTTP_1_1.asString()),
-                new HttpConnectionFactory(https_config));
-        https.setPort(8443);
-        https.setIdleTimeout(500000);
+
+        ServerConnector sslConnector = new ServerConnector(server,
+                new SslConnectionFactory(sslContextFactory, "http/1.1"),
+                new HttpConnectionFactory(https));
+        sslConnector.setPort(8443);
         
         
         // Here you see the server having multiple connectors registered with
@@ -127,7 +90,7 @@ public class AppMain2 {
         // has something to pass requests off to.
  
         // Set the connectors
-        server.setConnectors(new Connector[] {http, https});
+        server.setConnectors(new Connector[] {sslConnector});
 
 		// Handler for multiple web apps
 		HandlerCollection handlers = new HandlerCollection();
@@ -203,6 +166,7 @@ public class AppMain2 {
 		// Adding the handlers to the server
 		server.setHandler(handlers);
 
+		server.getStopAtShutdown() ;
 		// Starting the Server
 		server.start();
 		System.out.println("Started!");
