@@ -19,6 +19,8 @@ import java.io.File;
 import java.io.FileNotFoundException;
 import java.util.Collections;
 
+import net.yxy.athena.listener.InitApplication;
+
 import org.eclipse.jetty.http.HttpVersion;
 import org.eclipse.jetty.security.ConstraintMapping;
 import org.eclipse.jetty.security.ConstraintSecurityHandler;
@@ -101,7 +103,7 @@ public class AppMain2 {
 		webapp1.setContextPath("/athena");
 		
 		// Init global functional features
-//		webapp1.addEventListener(new InitApplication());
+		webapp1.addEventListener(new InitApplication());
 		
 		// Configure LoginService which is required by each context/webapp 
 		// that has a authentication mechanism, which is used to check the 
