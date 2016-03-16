@@ -1,23 +1,34 @@
 package net.yxy.athena.main;
 
-import com.orientechnologies.orient.core.db.document.ODatabaseDocumentTx;
-import com.orientechnologies.orient.core.record.impl.ODocument;
+import java.io.File;
+
+import com.orientechnologies.orient.server.OServer;
+import com.orientechnologies.orient.server.OServerMain;
 
 public class OrientDBTest {
 
-	public static void main(String[] args) throws InterruptedException {
-		ODatabaseDocumentTx db = new ODatabaseDocumentTx ("plocal:/tmp/databases/petshop");
-		db.open("admin", "admin");
-		
-		// CREATE A NEW DOCUMENT AND FILL IT
-		ODocument doc = new ODocument("Person");
-		doc.field( "name", "Luke" );
-		doc.field( "surname", "Skywalker" );
-		doc.field( "city", new ODocument("City").field("name","Rome").field("country", "Italy") );
+	public static void main(String[] args) throws Exception {
 
-		// SAVE THE DOCUMENT
-		doc.save();
-		db.close();
+		OServer server = OServerMain.create();
+//		OServerConfiguration cfg = new OServerConfiguration();
+		// FILL THE OServerConfiguration OBJECT
+		server.startup(new File("src/main/resources/db.config.xml"));
+		server.activate();
+
+		// ODatabaseDocumentTx db = new ODatabaseDocumentTx
+		// ("plocal:/tmp/databases/petshop");
+		// db.open("admin", "admin");
+		//
+		// // CREATE A NEW DOCUMENT AND FILL IT
+		// ODocument doc = new ODocument("Person");
+		// doc.field( "name", "Luke" );
+		// doc.field( "surname", "Skywalker" );
+		// doc.field( "city", new
+		// ODocument("City").field("name","Rome").field("country", "Italy") );
+		//
+		// // SAVE THE DOCUMENT
+		// doc.save();
+		// db.close();
 	}
 
 }

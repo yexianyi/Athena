@@ -115,14 +115,6 @@
                 <!-- these dependencies should be optional -->
                 <exclusion>
                     <groupId>com.orientechnologies</groupId>
-                    <artifactId>orientdb-server</artifactId>
-                </exclusion>
-                <exclusion>
-                    <groupId>com.orientechnologies</groupId>
-                    <artifactId>orientdb-enterprise</artifactId>
-                </exclusion>
-                <exclusion>
-                    <groupId>com.orientechnologies</groupId>
                     <artifactId>orientdb-tools</artifactId>
                 </exclusion>
                 <exclusion>
