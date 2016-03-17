@@ -1,14 +1,13 @@
-package net.yxy.athena.listener;
+package net.yxy.athena.servlet.listeners;
 
 import javax.servlet.ServletContextEvent;
 import javax.servlet.ServletContextListener;
 
-import net.yxy.athena.global.Synchronizer;
-
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import com.orientechnologies.orient.core.db.document.ODatabaseDocumentTx;
+import net.yxy.athena.db.EmbeddedDBServer;
+import net.yxy.athena.global.Synchronizer;
 
 public class InitApplication implements ServletContextListener {
 	
@@ -18,23 +17,20 @@ public class InitApplication implements ServletContextListener {
 	
 	@Override
 	public void contextInitialized(ServletContextEvent arg0) {
-		logger.info("Startup Synchronizer");
 		synchronizer.start();
-		
-		launchNoSQLEmbeddedDB() ;
+		EmbeddedDBServer.startup() ;
+		EmbeddedDBServer.importSeedData();
 		
 	}
 
-	private void launchNoSQLEmbeddedDB() {
-		ODatabaseDocumentTx database = new ODatabaseDocumentTx("plocal:/temp/db").open("admin", "admin");
-		
-		
+	private void startupOrientDB() {
+//		ODatabaseDocumentTx database = new ODatabaseDocumentTx("plocal:/temp/db").open("admin", "admin");
 	}
 
 	@Override
 	public void contextDestroyed(ServletContextEvent arg0) {
-		logger.info("Shutdown Synchronizer");
 		synchronizer.shutdown() ;
+		EmbeddedDBServer.shutdown() ;
 	}
 
 }
