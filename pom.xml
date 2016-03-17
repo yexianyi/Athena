@@ -23,10 +23,10 @@
 			<artifactId>jclouds-all</artifactId>
 			<version>${jclouds.version}</version>
 			<exclusions>
-				<exclusion> 
-					<groupId>javax.ws.rs</groupId> 
-					<artifactId>jsr311-api</artifactId> 
-				</exclusion> 
+				<exclusion>
+					<groupId>javax.ws.rs</groupId>
+					<artifactId>jsr311-api</artifactId>
+				</exclusion>
 			</exclusions>
 		</dependency>
 		<dependency>
@@ -34,10 +34,10 @@
 			<artifactId>jclouds-slf4j</artifactId>
 			<version>1.6.0</version>
 			<exclusions>
-				<exclusion> 
-					<groupId>javax.ws.rs</groupId> 
-					<artifactId>jsr311-api</artifactId> 
-				</exclusion> 
+				<exclusion>
+					<groupId>javax.ws.rs</groupId>
+					<artifactId>jsr311-api</artifactId>
+				</exclusion>
 			</exclusions>
 		</dependency>
 
@@ -72,7 +72,7 @@
 			<artifactId>jetty-jmx</artifactId>
 			<version>${jetty.version}</version>
 		</dependency>
-		
+
 		<!-- Jersey -->
 		<dependency>
 			<groupId>org.glassfish.jersey.core</groupId>
@@ -99,65 +99,65 @@
 			<artifactId>jersey-media-json-jackson</artifactId>
 			<version>${jersey.version}</version>
 		</dependency>
-		
+
 		<dependency>
 			<groupId>com.google.guava</groupId>
 			<artifactId>guava</artifactId>
 			<version>19.0</version>
 		</dependency>
-		
+
 		<!-- OrientDB -->
 		<dependency>
 			<groupId>com.orientechnologies</groupId>
 			<artifactId>orientdb-graphdb</artifactId>
 			<version>${orientdb.version}</version>
-            <exclusions>
-                <!-- these dependencies should be optional -->
-                <exclusion>
-                    <groupId>com.orientechnologies</groupId>
-                    <artifactId>orientdb-tools</artifactId>
-                </exclusion>
-                <exclusion>
-                    <groupId>com.tinkerpop</groupId>
-                    <artifactId>pipes</artifactId>
-                </exclusion>
-                <exclusion>
-                    <groupId>com.tinkerpop.gremlin</groupId>
-                    <artifactId>gremlin-java</artifactId>
-                </exclusion>
-                <exclusion>
-                    <groupId>com.tinkerpop.gremlin</groupId>
-                    <artifactId>gremlin-groovy</artifactId>
-                </exclusion>
-                <!-- not needed if LongIDVertexCache is not used -->
-                <exclusion>
-                    <groupId>colt</groupId>
-                    <artifactId>colt</artifactId>
-                </exclusion>
-                <!-- not needed if graphson is not used -->
-                <exclusion>
-                    <groupId>org.codehaus.jettison</groupId>
-                    <artifactId>jettison</artifactId>     
-                </exclusion>
-                <exclusion>
-                    <groupId>com.fasterxml.jackson.datatype</groupId>
-                    <artifactId>jackson-datatype-json-org</artifactId>     
-                </exclusion>
-                <!-- not used by OrientDB if using OrientGraphFactory -->
-                <exclusion>
-                    <artifactId>commons-configuration</artifactId>
-                    <groupId>commons-configuration</groupId>
-                </exclusion>
-            </exclusions>
+			<exclusions>
+				<!-- these dependencies should be optional -->
+				<exclusion>
+					<groupId>com.orientechnologies</groupId>
+					<artifactId>orientdb-tools</artifactId>
+				</exclusion>
+				<exclusion>
+					<groupId>com.tinkerpop</groupId>
+					<artifactId>pipes</artifactId>
+				</exclusion>
+				<exclusion>
+					<groupId>com.tinkerpop.gremlin</groupId>
+					<artifactId>gremlin-java</artifactId>
+				</exclusion>
+				<exclusion>
+					<groupId>com.tinkerpop.gremlin</groupId>
+					<artifactId>gremlin-groovy</artifactId>
+				</exclusion>
+				<!-- not needed if LongIDVertexCache is not used -->
+				<exclusion>
+					<groupId>colt</groupId>
+					<artifactId>colt</artifactId>
+				</exclusion>
+				<!-- not needed if graphson is not used -->
+				<exclusion>
+					<groupId>org.codehaus.jettison</groupId>
+					<artifactId>jettison</artifactId>
+				</exclusion>
+				<exclusion>
+					<groupId>com.fasterxml.jackson.datatype</groupId>
+					<artifactId>jackson-datatype-json-org</artifactId>
+				</exclusion>
+				<!-- not used by OrientDB if using OrientGraphFactory -->
+				<exclusion>
+					<artifactId>commons-configuration</artifactId>
+					<groupId>commons-configuration</groupId>
+				</exclusion>
+			</exclusions>
 
 		</dependency>
-		
+
 		<dependency>
 			<groupId>org.slf4j</groupId>
 			<artifactId>slf4j-simple</artifactId>
 			<version>1.7.18</version>
 		</dependency>
-		
+
 
 		<dependency>
 			<groupId>junit</groupId>
@@ -168,85 +168,115 @@
 	</dependencies>
 	<build>
 		<resources>
-		    <resource>
-		        <directory>src/main/resources</directory>
-		    </resource>
-		    <resource>
-		        <directory>src/main/webapp</directory>
-		    </resource>
+			<resource>
+				<directory>src/main/resources</directory>
+			</resource>
+			<resource>
+				<directory>src/main/webapp</directory>
+			</resource>
 		</resources>
-		<plugins>
-			<plugin>
-				<groupId>org.apache.maven.plugins</groupId>
-				<artifactId>maven-compiler-plugin</artifactId>
-				<version>3.5.1</version>
-				<configuration>
-					<source>${java.source.level}</source>
-					<target>${java.target.level}</target>
-					<encoding>UTF-8</encoding>
-					<showDeprecation>true</showDeprecation>
-					<showWarnings>true</showWarnings>
-				</configuration>
-			</plugin>
-			<plugin>
-			    <groupId>org.apache.maven.plugins</groupId>
-			    <artifactId>maven-jar-plugin</artifactId>
-			    <version>2.4</version>
-			    <executions>
-			        <execution>
-			            <id>package-jar</id>
-			            <phase>package</phase>
-			            <goals>
-			                <goal>jar</goal>
-			            </goals>
-			        </execution>
-			    </executions>
-			</plugin>
-			<plugin>
-			    <artifactId>maven-assembly-plugin</artifactId>
-				<configuration>
-					<archive>
-						<manifest>
-							<mainClass>net.yxy.athena.main.AppMain3</mainClass>
-						</manifest>
-					</archive>
-					<descriptorRefs>
-						<descriptorRef>jar-with-dependencies</descriptorRef>
-					</descriptorRefs>
-					<appendAssemblyId>false</appendAssemblyId>
-				</configuration>
-				<executions>
-					<execution>
-						<phase>package</phase>
-						<goals>
-							<goal>single</goal>
-						</goals>
-					</execution>
-				</executions>
-			</plugin>
-			<plugin>
-			       <groupId>org.apache.maven.plugins</groupId>
-			       <artifactId>maven-resources-plugin</artifactId>
-			       <configuration>
-			              <encoding>UTF-8</encoding>
-			       </configuration>
-			</plugin> 
-			<plugin>
-			    <groupId>org.mortbay.jetty</groupId>
-		        <artifactId>maven-jetty-plugin</artifactId>
-		        <version>${jetty.version}</version>
-		        <!-- adding configuration below: -->
-		        <configuration>
-		            <userRealms>
-		                <userRealm implementation="org.mortbay.jetty.security.HashUserRealm">
-		                    <!-- this name must match the realm-name in web.xml -->
-		                    <name>MyRealm</name>
-		                    <config>src/main/resources/realm.properties</config>
-		                </userRealm>
-		            </userRealms>
-		        </configuration>
-		    </plugin>
-
-		</plugins>
+		<pluginManagement>
+			<plugins>
+				<plugin>
+					<groupId>org.apache.maven.plugins</groupId>
+					<artifactId>maven-compiler-plugin</artifactId>
+					<version>3.5.1</version>
+					<configuration>
+						<source>${java.source.level}</source>
+						<target>${java.target.level}</target>
+						<encoding>UTF-8</encoding>
+						<showDeprecation>true</showDeprecation>
+						<showWarnings>true</showWarnings>
+					</configuration>
+				</plugin>
+				<plugin>
+					<groupId>org.apache.maven.plugins</groupId>
+					<artifactId>maven-jar-plugin</artifactId>
+					<version>2.4</version>
+					<executions>
+						<execution>
+							<id>package-jar</id>
+							<phase>package</phase>
+							<goals>
+								<goal>jar</goal>
+							</goals>
+						</execution>
+					</executions>
+				</plugin>
+				<plugin>
+					<artifactId>maven-assembly-plugin</artifactId>
+					<configuration>
+						<archive>
+							<manifest>
+								<mainClass>net.yxy.athena.main.AppMain3</mainClass>
+							</manifest>
+						</archive>
+						<descriptorRefs>
+							<descriptorRef>jar-with-dependencies</descriptorRef>
+						</descriptorRefs>
+						<appendAssemblyId>false</appendAssemblyId>
+					</configuration>
+					<executions>
+						<execution>
+							<phase>package</phase>
+							<goals>
+								<goal>single</goal>
+							</goals>
+						</execution>
+					</executions>
+				</plugin>
+				<plugin>
+					<groupId>org.apache.maven.plugins</groupId>
+					<artifactId>maven-resources-plugin</artifactId>
+					<configuration>
+						<encoding>UTF-8</encoding>
+					</configuration>
+				</plugin>
+				<plugin>
+					<groupId>org.mortbay.jetty</groupId>
+					<artifactId>maven-jetty-plugin</artifactId>
+					<version>${jetty.version}</version>
+					<!-- adding configuration below: -->
+					<configuration>
+						<userRealms>
+							<userRealm implementation="org.mortbay.jetty.security.HashUserRealm">
+								<!-- this name must match the realm-name in web.xml -->
+								<name>MyRealm</name>
+								<config>src/main/resources/realm.properties</config>
+							</userRealm>
+						</userRealms>
+					</configuration>
+				</plugin>
+				<plugin>
+					<groupId>com.mycila</groupId>
+					<artifactId>license-maven-plugin</artifactId>
+					<version>2.11</version>
+					<configuration>
+						<header>src/main/resources/license_header.ftl</header>
+						<properties>
+							<year>2016</year>
+							<owner>Xianyi Ye</owner>
+							<email>yexianyi@hotmail.com</email>
+						</properties>
+						<includes>
+							<include>src/main/java/**</include>
+							<include>src/test/java/**</include>
+						</includes>
+						<excludes>
+							<exclude>**/README</exclude>
+							<exclude>src/main/resources/**</exclude>
+							<exclude>src/test/resources/**</exclude>
+						</excludes>
+					</configuration>
+					<executions>
+						<execution>
+							<goals>
+								<goal>format</goal>
+							</goals>
+						</execution>
+					</executions>
+				</plugin>
+			</plugins>
+		</pluginManagement>
 	</build>
 </project>
