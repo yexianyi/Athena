@@ -39,7 +39,6 @@ public class EmbeddedDBServer {
 	
 	private static OPartitionedDatabasePool dbPool = null;
 	private static OServer server = null;
-	private static ODatabase<ODatabaseDocumentTx> database ;
 	private static volatile ServerStatus status ;
 	
 	public EmbeddedDBServer(){
@@ -74,9 +73,9 @@ public class EmbeddedDBServer {
 			setStatus(ServerStatus.SHUTTING_DOWN) ;
 			logger.info("Database Server is shutting down...");
 			
-			logger.info("Database "+Constants.DB_NAME+" is shutting down...");
-			database.close();
-			logger.info("Database "+Constants.DB_NAME+" is terminated...");
+			logger.info("Database Connection Pool is shutting down...");
+			dbPool.close();
+			logger.info("Database Connection Pool is terminated...");
 			
 			server.shutdown() ;
 			setStatus(ServerStatus.SHUTDOWN) ;
@@ -86,15 +85,10 @@ public class EmbeddedDBServer {
 		return getStatus() ;
 	}
 	
-	public static ODatabase<ODatabaseDocumentTx> createOpenDatabase(){
-		String db_name = server.getAvailableStorageNames().get(Constants.DB_NAME) ;
-		if(db_name==null){
-			database = new ODatabaseDocumentTx(Constants.DB_PATH).create();
-//			database.open(Constants.DB_USERNAME, Constants.DB_PASSWORD) ;
-		}
-//		database =  (ODatabase<ODatabaseDocumentTx>) server.openDatabase("Document", Constants.DB_NAME, Constants.DB_USERNAME, Constants.DB_PASSWORD) ;
+	public static ODatabaseDocumentTx initConnectionPool(){
 		dbPool = new OPartitionedDatabasePool(Constants.DB_PATH, Constants.DB_USERNAME, Constants.DB_PASSWORD, Constants.DB_MAX_POOL_SIZE);
-		return database ;
+		dbPool.setAutoCreate(true) ;
+		return dbPool.acquire() ;
 		
 	}
 	
@@ -129,7 +123,7 @@ public class EmbeddedDBServer {
 
 	public static void main(String[] args) throws InterruptedException {
 		EmbeddedDBServer.startup() ;
-		EmbeddedDBServer.createOpenDatabase() ;
+		EmbeddedDBServer.initConnectionPool() ;
 		EmbeddedDBServer.importSeedData();
 		
 		Thread.sleep(10000);
