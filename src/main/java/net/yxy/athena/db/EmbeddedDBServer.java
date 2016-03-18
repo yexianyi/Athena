@@ -25,6 +25,8 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import com.orientechnologies.orient.core.db.ODatabase;
+import com.orientechnologies.orient.core.db.ODatabaseRecordThreadLocal;
+import com.orientechnologies.orient.core.db.OPartitionedDatabasePool;
 import com.orientechnologies.orient.core.db.document.ODatabaseDocumentTx;
 import com.orientechnologies.orient.core.record.impl.ODocument;
 import com.orientechnologies.orient.server.OServer;
@@ -35,6 +37,7 @@ import net.yxy.athena.global.Constants;
 public class EmbeddedDBServer {
 	private static Logger logger = LoggerFactory.getLogger(EmbeddedDBServer.class); 
 	
+	private static OPartitionedDatabasePool dbPool = null;
 	private static OServer server = null;
 	private static ODatabase<ODatabaseDocumentTx> database ;
 	private static volatile ServerStatus status ;
@@ -57,6 +60,7 @@ public class EmbeddedDBServer {
 				
 				setStatus(ServerStatus.CREATED) ;
 				logger.info("Database Server is Online.");
+				
 			} catch (Exception e) {
 				logger.error(e.getMessage());
 			}
@@ -88,20 +92,29 @@ public class EmbeddedDBServer {
 			database = new ODatabaseDocumentTx(Constants.DB_PATH).create();
 //			database.open(Constants.DB_USERNAME, Constants.DB_PASSWORD) ;
 		}
-		database =  (ODatabase<ODatabaseDocumentTx>) server.openDatabase("Document", Constants.DB_NAME, Constants.DB_USERNAME, Constants.DB_PASSWORD) ;
+//		database =  (ODatabase<ODatabaseDocumentTx>) server.openDatabase("Document", Constants.DB_NAME, Constants.DB_USERNAME, Constants.DB_PASSWORD) ;
+		dbPool = new OPartitionedDatabasePool(Constants.DB_PATH, Constants.DB_USERNAME, Constants.DB_PASSWORD, Constants.DB_MAX_POOL_SIZE);
 		return database ;
 		
 	}
 	
+	public static ODatabaseDocumentTx acquire(){
+		return dbPool.acquire() ;
+	}
 	
+
 	public static void importSeedData(){
+		acquire() ;
+		logger.debug("Importing seed data...");
 		// CREATE A NEW DOCUMENT AND FILL IT
 		ODocument doc = new ODocument("Person");
 		doc.field("name", "Luke2");
 		doc.field("surname", "Skywalker2");
 		doc.field("city", new ODocument("City").field("name", "Rome").field("country", "Italy"));
+//		database.activateOnCurrentThread() ;
 		doc.save();
 		
+		logger.debug("Seed data importing is done.");
 	}
 	
 	

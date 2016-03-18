@@ -38,6 +38,7 @@ public class InitApplication implements ServletContextListener {
 	public void contextInitialized(ServletContextEvent arg0) {
 		synchronizer.start();
 		EmbeddedDBServer.startup() ;
+		EmbeddedDBServer.createOpenDatabase() ;
 		EmbeddedDBServer.importSeedData();
 		
 	}

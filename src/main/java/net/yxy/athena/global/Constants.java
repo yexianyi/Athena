@@ -26,5 +26,6 @@ public final class Constants {
 	public static final String DB_PATH= "plocal:./databases/"+Constants.DB_NAME ;
 	public static final String DB_USERNAME = "admin" ;
 	public static final String DB_PASSWORD = "admin" ;
+	public static final int DB_MAX_POOL_SIZE = 50;
 
 }

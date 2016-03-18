@@ -24,11 +24,6 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Set;
 
-import javax.ws.rs.GET;
-import javax.ws.rs.Path;
-import javax.ws.rs.Produces;
-import javax.ws.rs.core.MediaType;
-
 import org.jclouds.ContextBuilder;
 import org.jclouds.logging.slf4j.config.SLF4JLoggingModule;
 import org.jclouds.openstack.nova.v2_0.NovaApi;
@@ -38,6 +33,9 @@ import org.jclouds.openstack.nova.v2_0.features.ServerApi;
 import com.google.common.collect.ImmutableSet;
 import com.google.common.io.Closeables;
 import com.google.inject.Module;
+import com.orientechnologies.orient.core.record.impl.ODocument;
+
+import net.yxy.athena.db.EmbeddedDBServer;
 
 
 public class ComputeService {
@@ -57,6 +55,16 @@ public class ComputeService {
 	}
 	
 	public List<Server> listServers() {
+		EmbeddedDBServer.acquire() ;
+		
+		
+		ODocument doc = new ODocument("Person");
+		doc.field("name", "test");
+		doc.field("surname", "test");
+		doc.field("city", new ODocument("City").field("name", "Rome").field("country", "Italy"));
+		doc.save();
+		
+		
 		List<Server> serverList = new ArrayList<Server>() ;
 		for (String region : regions) {
 			ServerApi serverApi = novaApi.getServerApi(region);
