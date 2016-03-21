@@ -19,23 +19,24 @@
  */
 package net.yxy.athena.rest;
 
-import java.util.Date;
 import java.util.List;
 
 import javax.ws.rs.GET;
 import javax.ws.rs.Path;
 import javax.ws.rs.Produces;
 import javax.ws.rs.core.CacheControl;
-import javax.ws.rs.core.EntityTag;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
+
+import net.yxy.athena.db.EmbeddedDBServer;
+import net.yxy.athena.global.Constants;
+import net.yxy.athena.service.server.ComputeService;
 
 import org.jclouds.openstack.nova.v2_0.domain.Server;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import net.yxy.athena.global.Constants;
-import net.yxy.athena.service.server.ComputeService;
+import com.orientechnologies.orient.core.record.impl.ODocument;
 
 @Path("/admin/server")
 public class ServerServiceApi {
@@ -49,6 +50,13 @@ public class ServerServiceApi {
 	public Response listServers() {
 		List<Server> list = cs.listServers() ;
 		Response.ResponseBuilder response = Response.ok(list).type(MediaType.APPLICATION_JSON);
+		
+		EmbeddedDBServer.acquire() ;
+		ODocument doc = new ODocument("Person");
+		doc.field("name", "test");
+		doc.field("surname", "test");
+		doc.field("city", new ODocument("City").field("name", "Rome").field("country", "Italy"));
+		doc.save();
 		
 		///////////////HTTP Cache by Expire////////////////
 		//Expires:

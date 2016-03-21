@@ -36,6 +36,7 @@ import com.google.inject.Module;
 import com.orientechnologies.orient.core.record.impl.ODocument;
 
 import net.yxy.athena.db.EmbeddedDBServer;
+import net.yxy.athena.global.Constants;
 
 
 public class ComputeService {
@@ -45,12 +46,8 @@ public class ComputeService {
 	public ComputeService() {
 		Iterable<Module> modules = ImmutableSet.<Module> of(new SLF4JLoggingModule());
 
-		String provider = "openstack-nova";
-		String identity = "admin:admin"; // tenantName:userName
-		String credential = "admin";
-
-		novaApi = ContextBuilder.newBuilder(provider).endpoint("http://10.140.253.30:5000/v2.0/")
-				.credentials(identity, credential).modules(modules).buildApi(NovaApi.class);
+		novaApi = ContextBuilder.newBuilder(Constants.OPENSTACK_PROVIDER).endpoint(Constants.OPENSTACK_ENDPOINT)
+				.credentials(Constants.OPENSTACK_IDENTITY, Constants.OPENSTACK_CREDENTIAL).modules(modules).buildApi(NovaApi.class);
 		regions = novaApi.getConfiguredRegions();
 	}
 	
