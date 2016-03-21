@@ -55,24 +55,23 @@ public class ComputeService {
 	}
 	
 	public List<Server> listServers() {
-		EmbeddedDBServer.acquire() ;
+//		EmbeddedDBServer.acquire() ;
 		
 		
-		ODocument doc = new ODocument("Person");
-		doc.field("name", "test");
-		doc.field("surname", "test");
-		doc.field("city", new ODocument("City").field("name", "Rome").field("country", "Italy"));
-		doc.save();
+//		ODocument doc = new ODocument("Person");
+//		doc.field("name", "test");
+//		doc.field("surname", "test");
+//		doc.field("city", new ODocument("City").field("name", "Rome").field("country", "Italy"));
+//		doc.save();
 		
 		
 		List<Server> serverList = new ArrayList<Server>() ;
 		for (String region : regions) {
 			ServerApi serverApi = novaApi.getServerApi(region);
 
-			System.out.println("Servers in region:" + region);
-			
+//			System.out.println("Servers in region:" + region);
 			for (Server server : serverApi.listInDetail().concat()) {
-				System.out.println("  " + server);
+//				System.out.println("  " + server);
 				serverList.add(server) ;
 			}
 		}
