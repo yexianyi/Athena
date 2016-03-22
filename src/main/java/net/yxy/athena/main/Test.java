@@ -19,9 +19,55 @@
  */
 package net.yxy.athena.main;
 
+import java.util.List;
+
 import org.eclipse.jetty.util.security.Password;
 
 public class Test {
+	
+	private List<String> list ;
+	
+	private String name = "test" ;
+	
+	private String password = "123456" ;
+	
+	
+
+	public List<String> getList() {
+		return list;
+	}
+
+
+
+	public void setList(List<String> list) {
+		this.list = list;
+	}
+
+
+
+	public String getName() {
+		return name;
+	}
+
+
+
+	public void setName(String name) {
+		this.name = name;
+	}
+
+
+
+	public String getPassword() {
+		return password;
+	}
+
+
+
+	public void setPassword(String password) {
+		this.password = password;
+	}
+
+
 
 	public static void main(String[] args) {
 		org.eclipse.jetty.util.security.Password.main(new String[]{"123456"});

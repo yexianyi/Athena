@@ -20,19 +20,24 @@
 package net.yxy.athena.db;
 
 import java.io.File;
+import java.io.IOException;
+import java.util.List;
 
+import org.jclouds.openstack.nova.v2_0.domain.Server;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import com.orientechnologies.orient.core.db.ODatabase;
-import com.orientechnologies.orient.core.db.ODatabaseRecordThreadLocal;
+import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.databind.ObjectMapper;
+import com.orientechnologies.orient.client.remote.OServerAdmin;
 import com.orientechnologies.orient.core.db.OPartitionedDatabasePool;
 import com.orientechnologies.orient.core.db.document.ODatabaseDocumentTx;
-import com.orientechnologies.orient.core.record.impl.ODocument;
+import com.orientechnologies.orient.object.db.OObjectDatabaseTx;
 import com.orientechnologies.orient.server.OServer;
 import com.orientechnologies.orient.server.OServerMain;
 
 import net.yxy.athena.global.Constants;
+import net.yxy.athena.service.server.ComputeService;
 
 public class EmbeddedDBServer {
 	private static Logger logger = LoggerFactory.getLogger(EmbeddedDBServer.class); 
@@ -101,12 +106,23 @@ public class EmbeddedDBServer {
 		acquire() ;
 		logger.debug("Importing seed data...");
 		// CREATE A NEW DOCUMENT AND FILL IT
-		ODocument doc = new ODocument("Person");
-		doc.field("name", "Luke2");
-		doc.field("surname", "Skywalker2");
-		doc.field("city", new ODocument("City").field("name", "Rome").field("country", "Italy"));
-//		database.activateOnCurrentThread() ;
-		doc.save();
+//		ODocument doc = new ODocument("Person");
+//		doc.field("name", "Luke2");
+//		doc.field("surname", "Skywalker2");
+//		doc.field("city", new ODocument("City").field("name", "Rome").field("country", "Italy"));
+//		doc.save();
+		
+		ComputeService cs = new ComputeService() ;
+		List<Server> list = cs.listServers() ;
+		ObjectMapper mapper = new ObjectMapper();
+		//Object to JSON in String
+		try {
+			String jsonInString = mapper.writeValueAsString(list);
+			System.out.println(jsonInString);
+		} catch (JsonProcessingException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
 		
 		logger.debug("Seed data importing is done.");
 	}
@@ -121,15 +137,48 @@ public class EmbeddedDBServer {
 	}
 	
 
-	public static void main(String[] args) throws InterruptedException {
-		EmbeddedDBServer.startup() ;
-		EmbeddedDBServer.initConnectionPool() ;
-		EmbeddedDBServer.importSeedData();
-		
-		Thread.sleep(10000);
-
+	public static void main(String[] args) throws InterruptedException, IOException {
+//		EmbeddedDBServer.startup() ;
+//		EmbeddedDBServer.initConnectionPool() ;
+//		EmbeddedDBServer.importSeedData();
+//		
+//		Thread.sleep(10000);
+//
 //		EmbeddedDBServer.shutdown();
+		
+		String remote = "remote:localhost/";
+	    String nameDB = "athena"; 
+	    String url = remote + nameDB;
 
+		 OServerAdmin serverAdmin = new OServerAdmin(url).connect("root", "root");
+		    serverAdmin.createDatabase(nameDB, "object", "plocal");
+		    System.out.println(" Database '"+nameDB +"' created!..");
+
+		    OPartitionedDatabasePool pool = new OPartitionedDatabasePool(url, "admin", "admin");
+
+		    //object
+		    OObjectDatabaseTx db = new OObjectDatabaseTx(pool.acquire());
+
+		    db.getEntityManager().registerEntityClass(Person.class);
+		    Person personA = db.newInstance(Person.class);
+		    personA.setName("tennantA");
+		    db.save(personA);
+		    db.close();
+		
+	}
+	
+	static class Person{
+		String name = "jack" ;
+
+		public String getName() {
+			return name;
+		}
+
+		public void setName(String name) {
+			this.name = name;
+		}
+		
+		
 	}
 
 }
