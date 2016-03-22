@@ -90,11 +90,10 @@ public class EmbeddedDBServer {
 		return getStatus() ;
 	}
 	
-	public static ODatabaseDocumentTx initConnectionPool(){
+	public static void initConnectionPool(){
 		dbPool = new OPartitionedDatabasePool(Constants.DB_PATH, Constants.DB_USERNAME, Constants.DB_PASSWORD, Constants.DB_MAX_POOL_SIZE);
 		dbPool.setAutoCreate(true) ;
-		return dbPool.acquire() ;
-		
+//		database = new ODatabaseDocumentTx(Constants.DB_PATH);
 	}
 	
 	public static ODatabaseDocumentTx acquire(){
@@ -112,17 +111,7 @@ public class EmbeddedDBServer {
 //		doc.field("city", new ODocument("City").field("name", "Rome").field("country", "Italy"));
 //		doc.save();
 		
-		ComputeService cs = new ComputeService() ;
-		List<Server> list = cs.listServers() ;
-		ObjectMapper mapper = new ObjectMapper();
-		//Object to JSON in String
-		try {
-			String jsonInString = mapper.writeValueAsString(list);
-			System.out.println(jsonInString);
-		} catch (JsonProcessingException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
+	
 		
 		logger.debug("Seed data importing is done.");
 	}
@@ -138,33 +127,27 @@ public class EmbeddedDBServer {
 	
 
 	public static void main(String[] args) throws InterruptedException, IOException {
-//		EmbeddedDBServer.startup() ;
-//		EmbeddedDBServer.initConnectionPool() ;
-//		EmbeddedDBServer.importSeedData();
-//		
-//		Thread.sleep(10000);
-//
+		EmbeddedDBServer.startup() ;
+		EmbeddedDBServer.initConnectionPool() ;
+		EmbeddedDBServer.importSeedData();
+		
 //		EmbeddedDBServer.shutdown();
 		
-		String remote = "remote:localhost/";
-	    String nameDB = "athena"; 
-	    String url = remote + nameDB;
+	}
+	
+	@Deprecated
+	private void theWayToCreateObjectDB(){
+		OPartitionedDatabasePool dbPool = new OPartitionedDatabasePool(
+				Constants.DB_PATH, Constants.DB_USERNAME,
+				Constants.DB_PASSWORD, Constants.DB_MAX_POOL_SIZE);
+		dbPool.setAutoCreate(true);
+		OObjectDatabaseTx db = new OObjectDatabaseTx(dbPool.acquire());
 
-		 OServerAdmin serverAdmin = new OServerAdmin(url).connect("root", "root");
-		    serverAdmin.createDatabase(nameDB, "object", "plocal");
-		    System.out.println(" Database '"+nameDB +"' created!..");
-
-		    OPartitionedDatabasePool pool = new OPartitionedDatabasePool(url, "admin", "admin");
-
-		    //object
-		    OObjectDatabaseTx db = new OObjectDatabaseTx(pool.acquire());
-
-		    db.getEntityManager().registerEntityClass(Person.class);
-		    Person personA = db.newInstance(Person.class);
-		    personA.setName("tennantA");
-		    db.save(personA);
-		    db.close();
-		
+		db.getEntityManager().registerEntityClass(Person.class);
+		Person personA = db.newInstance(Person.class);
+		personA.setName("tennantA");
+		db.save(personA);
+		db.close();
 	}
 	
 	static class Person{

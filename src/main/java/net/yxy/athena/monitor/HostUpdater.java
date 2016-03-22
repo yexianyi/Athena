@@ -2,15 +2,14 @@ package net.yxy.athena.monitor;
 
 import java.util.List;
 
-import javax.ws.rs.core.MediaType;
-import javax.ws.rs.core.Response;
-
 import net.yxy.athena.db.EmbeddedDBServer;
+import net.yxy.athena.db.util.JSONUtil;
 import net.yxy.athena.service.server.ComputeService;
 
 import org.jclouds.openstack.nova.v2_0.domain.Server;
 
-import com.orientechnologies.orient.core.record.impl.ODocument;
+import com.orientechnologies.orient.core.db.document.ODatabaseDocumentTx;
+import com.orientechnologies.orient.core.sql.OCommandSQL;
 
 public class HostUpdater implements Runnable {
 
@@ -18,19 +17,14 @@ public class HostUpdater implements Runnable {
 	
 	@Override
 	public void run() {
+		ComputeService cs = new ComputeService() ;
 		List<Server> list = cs.listServers() ;
-		Response.ResponseBuilder response = Response.ok(list).type(MediaType.APPLICATION_JSON);
-		String jsonRsp = response.build().getEntity().toString() ;
-		
-		System.out.println(jsonRsp) ;
-		EmbeddedDBServer.acquire() ;
-		
-		ODocument doc = new ODocument("Person");
-		doc.field("name", "test");
-		doc.field("surname", "test");
-		doc.field("city", new ODocument("City").field("name", "Rome").field("country", "Italy"));
-		doc.save();
-		
+		for(Server server: list){
+			String json = JSONUtil.convertObj(server) ;
+			ODatabaseDocumentTx db = EmbeddedDBServer.acquire() ;
+			db.command(new OCommandSQL("insert into Server content "+json)) ;
+		}
+	
 		
 	}
 	
