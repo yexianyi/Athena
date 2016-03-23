@@ -23,7 +23,6 @@ import java.io.File;
 import java.io.FileNotFoundException;
 import java.util.Collections;
 
-import org.eclipse.jetty.http.HttpVersion;
 import org.eclipse.jetty.security.ConstraintMapping;
 import org.eclipse.jetty.security.ConstraintSecurityHandler;
 import org.eclipse.jetty.security.HashLoginService;
@@ -50,7 +49,7 @@ import net.yxy.athena.servlet.listeners.InitApplication;
  */
 
 public class AppMain2 {
-
+	
 	public static void main(String[] args) throws Exception {
 		
 		// Since this example shows off SSL configuration, we need a keystore

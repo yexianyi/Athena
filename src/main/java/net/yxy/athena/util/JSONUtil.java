@@ -1,4 +1,4 @@
-package net.yxy.athena.db.util;
+package net.yxy.athena.util;
 
 import net.yxy.athena.db.EmbeddedDBServer;
 

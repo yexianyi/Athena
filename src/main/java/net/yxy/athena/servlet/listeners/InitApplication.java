@@ -27,12 +27,13 @@ import org.slf4j.LoggerFactory;
 
 import net.yxy.athena.db.EmbeddedDBServer;
 import net.yxy.athena.global.Synchronizer;
+import net.yxy.athena.monitor.HostUpdater;
 
 public class InitApplication implements ServletContextListener {
 	
 	static private Logger logger = LoggerFactory.getLogger(InitApplication.class); 
 	private Synchronizer synchronizer = Synchronizer.createInstance() ;
-	
+	private HostUpdater hostUpdater = new HostUpdater() ;
 	
 	@Override
 	public void contextInitialized(ServletContextEvent arg0) {
@@ -41,16 +42,17 @@ public class InitApplication implements ServletContextListener {
 		EmbeddedDBServer.initConnectionPool() ;
 		EmbeddedDBServer.importSeedData();
 		
+		hostUpdater.start() ;
+		
 	}
 
-	private void startupOrientDB() {
-//		ODatabaseDocumentTx database = new ODatabaseDocumentTx("plocal:/temp/db").open("admin", "admin");
-	}
 
 	@Override
 	public void contextDestroyed(ServletContextEvent arg0) {
 		synchronizer.shutdown() ;
 		EmbeddedDBServer.shutdown() ;
+		
+		hostUpdater.shutdown();
 	}
 
 }
