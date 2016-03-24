@@ -27,13 +27,13 @@ import org.slf4j.LoggerFactory;
 
 import net.yxy.athena.db.EmbeddedDBServer;
 import net.yxy.athena.global.Synchronizer;
-import net.yxy.athena.monitor.HostUpdater;
+import net.yxy.athena.monitor.HostSynchronizer;
 
 public class InitApplication implements ServletContextListener {
 	
 	static private Logger logger = LoggerFactory.getLogger(InitApplication.class); 
 	private Synchronizer synchronizer = Synchronizer.createInstance() ;
-	private HostUpdater hostUpdater = new HostUpdater() ;
+	private HostSynchronizer hostUpdater = new HostSynchronizer() ;
 	
 	@Override
 	public void contextInitialized(ServletContextEvent arg0) {

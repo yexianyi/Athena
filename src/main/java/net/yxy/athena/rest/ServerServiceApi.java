@@ -19,7 +19,7 @@
  */
 package net.yxy.athena.rest;
 
-import java.util.List;
+import java.util.Map;
 
 import javax.ws.rs.GET;
 import javax.ws.rs.Path;
@@ -28,15 +28,15 @@ import javax.ws.rs.core.CacheControl;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 
-import net.yxy.athena.db.EmbeddedDBServer;
-import net.yxy.athena.global.Constants;
-import net.yxy.athena.service.server.ComputeService;
-
 import org.jclouds.openstack.nova.v2_0.domain.Server;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import com.orientechnologies.orient.core.record.impl.ODocument;
+
+import net.yxy.athena.db.EmbeddedDBServer;
+import net.yxy.athena.global.Constants;
+import net.yxy.athena.service.server.ComputeService;
 
 @Path("/admin/server")
 public class ServerServiceApi {
@@ -48,7 +48,7 @@ public class ServerServiceApi {
     @Path("list")
     @Produces(MediaType.APPLICATION_JSON)
 	public Response listServers() {
-		List<Server> list = cs.listServers() ;
+		Map<String, Server> list = cs.listServers() ;
 		Response.ResponseBuilder response = Response.ok(list).type(MediaType.APPLICATION_JSON);
 		
 		EmbeddedDBServer.acquire() ;

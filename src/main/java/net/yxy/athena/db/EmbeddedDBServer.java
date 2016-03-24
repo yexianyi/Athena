@@ -23,21 +23,17 @@ import java.io.File;
 import java.io.IOException;
 import java.util.List;
 
-import org.jclouds.openstack.nova.v2_0.domain.Server;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import com.fasterxml.jackson.core.JsonProcessingException;
-import com.fasterxml.jackson.databind.ObjectMapper;
-import com.orientechnologies.orient.client.remote.OServerAdmin;
 import com.orientechnologies.orient.core.db.OPartitionedDatabasePool;
 import com.orientechnologies.orient.core.db.document.ODatabaseDocumentTx;
+import com.orientechnologies.orient.core.record.impl.ODocument;
 import com.orientechnologies.orient.object.db.OObjectDatabaseTx;
 import com.orientechnologies.orient.server.OServer;
 import com.orientechnologies.orient.server.OServerMain;
 
 import net.yxy.athena.global.Constants;
-import net.yxy.athena.service.server.ComputeService;
 
 public class EmbeddedDBServer {
 	private static Logger logger = LoggerFactory.getLogger(EmbeddedDBServer.class); 
@@ -102,16 +98,12 @@ public class EmbeddedDBServer {
 	
 
 	public static void importSeedData(){
-		acquire() ;
 		logger.debug("Importing seed data...");
-		// CREATE A NEW DOCUMENT AND FILL IT
-//		ODocument doc = new ODocument("Person");
-//		doc.field("name", "Luke2");
-//		doc.field("surname", "Skywalker2");
-//		doc.field("city", new ODocument("City").field("name", "Rome").field("country", "Italy"));
-//		doc.save();
 		
-	
+		ODatabaseDocumentTx db = acquire() ;
+		if(!db.getMetadata().getSchema().existsClass("Server")){
+			db.getMetadata().getSchema().createClass("Server") ;
+		}
 		
 		logger.debug("Seed data importing is done.");
 	}

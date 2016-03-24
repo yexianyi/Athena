@@ -73,7 +73,7 @@ public final class Synchronizer extends Thread{
 	    		}
 	            
 	    		hashtext = sb.toString().substring(8, 24);  ;
-	    		logger.debug(hashtext);
+//	    		logger.debug(hashtext);
 	    		
 	    		Thread.sleep(Constants.REFRESH_INTERVAL);
 	        }

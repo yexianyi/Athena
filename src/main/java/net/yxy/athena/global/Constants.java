@@ -27,7 +27,7 @@ public final class Constants {
 	public static final String OPENSTACK_ENDPOINT = "http://10.140.253.30:5000/v2.0/";
 //	public static final String OPENSTACK_ENDPOINT = "http://192.168.1.106:5000/v2.0/";
 	
-	public static final int SYN_INTERVAL = 3000 ;
+	public static final int SYN_INTERVAL = 5000 ;
 	public static final int REFRESH_INTERVAL = 3000 ;
 	public static final String DB_NAME = "athena_db" ;
 	public static final String DB_PATH= "plocal:./databases/"+Constants.DB_NAME ;

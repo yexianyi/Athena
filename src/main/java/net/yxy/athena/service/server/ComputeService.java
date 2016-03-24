@@ -20,8 +20,8 @@
 package net.yxy.athena.service.server;
 
 import java.io.IOException;
-import java.util.ArrayList;
-import java.util.List;
+import java.util.HashMap;
+import java.util.Map;
 import java.util.Set;
 
 import org.jclouds.ContextBuilder;
@@ -33,9 +33,7 @@ import org.jclouds.openstack.nova.v2_0.features.ServerApi;
 import com.google.common.collect.ImmutableSet;
 import com.google.common.io.Closeables;
 import com.google.inject.Module;
-import com.orientechnologies.orient.core.record.impl.ODocument;
 
-import net.yxy.athena.db.EmbeddedDBServer;
 import net.yxy.athena.global.Constants;
 
 
@@ -51,7 +49,7 @@ public class ComputeService {
 		regions = novaApi.getConfiguredRegions();
 	}
 	
-	public List<Server> listServers() {
+	public Map<String, Server> listServers() {
 //		EmbeddedDBServer.acquire() ;
 		
 		
@@ -62,18 +60,18 @@ public class ComputeService {
 //		doc.save();
 		
 		
-		List<Server> serverList = new ArrayList<Server>() ;
+		Map<String, Server> serverMap = new HashMap<String, Server>() ;
 		for (String region : regions) {
 			ServerApi serverApi = novaApi.getServerApi(region);
 
 //			System.out.println("Servers in region:" + region);
 			for (Server server : serverApi.listInDetail().concat()) {
 //				System.out.println("  " + server);
-				serverList.add(server) ;
+				serverMap.put(server.getId(), server) ;
 			}
 		}
 		
-		return serverList;
+		return serverMap;
 	}
 	
 
