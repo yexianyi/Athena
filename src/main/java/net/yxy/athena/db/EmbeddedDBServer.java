@@ -22,7 +22,7 @@ package net.yxy.athena.db;
 import java.io.File;
 import java.io.IOException;
 import java.util.List;
-
+import static net.yxy.athena.global.Constants.* ;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -101,10 +101,11 @@ public class EmbeddedDBServer {
 		logger.debug("Importing seed data...");
 		
 		ODatabaseDocumentTx db = acquire() ;
-		if(!db.getMetadata().getSchema().existsClass("Server")){
-			db.getMetadata().getSchema().createClass("Server") ;
+		if(!db.getMetadata().getSchema().existsClass(ENTITY_SERVER)){
+			db.getMetadata().getSchema().createClass(ENTITY_SERVER) ;
 		}
 		
+		db.close();
 		logger.debug("Seed data importing is done.");
 	}
 	

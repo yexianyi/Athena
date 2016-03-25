@@ -14,8 +14,8 @@ $(document).ready(function(){
             dataType: "json",
             url: "/athena/api/admin/server/list",
             success: function(data){        
-              // alert(data);
-               $('#response').text = data ;
+               alert(JSON.stringify(data));
+               $('#response').text(JSON.stringify(data)) ;
             },
 	         error: function (msg, url, line) {
 	             alert('msg = ' + msg + ', url = ' + url + ', line = ' + line);

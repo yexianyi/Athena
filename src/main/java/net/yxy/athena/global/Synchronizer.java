@@ -75,7 +75,7 @@ public final class Synchronizer extends Thread{
 	    		hashtext = sb.toString().substring(8, 24);  ;
 //	    		logger.debug(hashtext);
 	    		
-	    		Thread.sleep(Constants.REFRESH_INTERVAL);
+	    		Thread.sleep(Constants.REFRESH_INTERVAL_MILISEC);
 	        }
 	        catch (NoSuchAlgorithmException e) {
 	            throw new RuntimeException(e);

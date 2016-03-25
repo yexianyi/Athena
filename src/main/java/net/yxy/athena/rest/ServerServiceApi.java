@@ -19,7 +19,10 @@
  */
 package net.yxy.athena.rest;
 
-import java.util.Map;
+import static net.yxy.athena.global.Constants.ENTITY_SERVER;
+
+import java.util.ArrayList;
+import java.util.List;
 
 import javax.ws.rs.GET;
 import javax.ws.rs.Path;
@@ -28,35 +31,35 @@ import javax.ws.rs.core.CacheControl;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 
-import org.jclouds.openstack.nova.v2_0.domain.Server;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.databind.ObjectMapper;
+import com.orientechnologies.orient.core.db.document.ODatabaseDocumentTx;
 import com.orientechnologies.orient.core.record.impl.ODocument;
 
 import net.yxy.athena.db.EmbeddedDBServer;
 import net.yxy.athena.global.Constants;
-import net.yxy.athena.service.server.ComputeService;
 
 @Path("/admin/server")
 public class ServerServiceApi {
 	static private Logger logger = LoggerFactory.getLogger(ServerServiceApi.class);  
 	
-	private ComputeService cs = new ComputeService() ;
-	
 	@GET
     @Path("list")
     @Produces(MediaType.APPLICATION_JSON)
 	public Response listServers() {
-		Map<String, Server> list = cs.listServers() ;
-		Response.ResponseBuilder response = Response.ok(list).type(MediaType.APPLICATION_JSON);
+		ODatabaseDocumentTx db = EmbeddedDBServer.acquire() ;
+		String jsonRsp = "" ;
+		List<String> records = new ArrayList<String>() ;
+		for(ODocument record : db.browseClass(ENTITY_SERVER)){
+			jsonRsp = record.toJSON() ;
+			records.add(jsonRsp) ;
+		}
 		
-		EmbeddedDBServer.acquire() ;
-		ODocument doc = new ODocument("Person");
-		doc.field("name", "test");
-		doc.field("surname", "test");
-		doc.field("city", new ODocument("City").field("name", "Rome").field("country", "Italy"));
-		doc.save();
+		Response.ResponseBuilder response = Response.ok(records).type(MediaType.APPLICATION_JSON);
+		
 		
 		///////////////HTTP Cache by Expire////////////////
 		//Expires:
@@ -89,7 +92,6 @@ public class ServerServiceApi {
 //		responseBuilder = Response.ok(orderDto).tag(etag);
 //		return responseBuilder.build();
 //		
-		
 		
 		return response.build();
 	}

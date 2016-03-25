@@ -6,7 +6,7 @@ import java.util.Map;
 import org.jclouds.openstack.nova.v2_0.domain.Server;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-
+import static net.yxy.athena.global.Constants.* ;
 import com.orientechnologies.orient.core.db.document.ODatabaseDocumentTx;
 import com.orientechnologies.orient.core.record.impl.ODocument;
 import com.orientechnologies.orient.core.sql.OCommandSQL;
@@ -34,15 +34,15 @@ public class HostSynchronizer extends Thread {
 			for(String serverId: map.keySet()){
 				String json = JSONUtil.convertObj(map.get(serverId)) ;
 				
-				OSQLSynchQuery<ODocument> query = new OSQLSynchQuery<ODocument>("select * from Server where id = ?");
+				OSQLSynchQuery<ODocument> query = new OSQLSynchQuery<ODocument>("select * from "+ENTITY_SERVER+" where id = ?");
 				List<ODocument> resultSet = db.command(query).execute(serverId);
 				
 				if(resultSet.size()>0){
-					OCommandSQL update = new OCommandSQL("update Server content "+json+" where id='"+serverId+"'") ;
+					OCommandSQL update = new OCommandSQL("update "+ENTITY_SERVER+" content "+json+" where id='"+serverId+"'") ;
 					db.command(update).execute() ;
 					logger.debug("Update Server#"+serverId);
 				}else{ // size == 0
-					OCommandSQL insert = new OCommandSQL("insert into Server content "+json) ;
+					OCommandSQL insert = new OCommandSQL("insert into "+ENTITY_SERVER+" content "+json) ;
 					db.command(insert).execute() ;
 					logger.debug("insert into Server content "+json);
 				}
@@ -50,7 +50,7 @@ public class HostSynchronizer extends Thread {
 			}
 			
 			//syn records from local to remote
-			for(ODocument server : db.browseClass("Server")){
+			for(ODocument server : db.browseClass(ENTITY_SERVER)){
 				if(!map.containsKey(server.field("id"))){
 					logger.debug("remove Server:"+server.field("id"));
 					server.delete();
@@ -63,6 +63,10 @@ public class HostSynchronizer extends Thread {
 			} catch (InterruptedException e) {
 				// TODO Auto-generated catch block
 				e.printStackTrace();
+			}
+			
+			if(db!=null){
+				db.close(); 
 			}
 		}//end while
 	
