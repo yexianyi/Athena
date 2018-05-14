@@ -38,5 +38,8 @@ public final class Constants {
 	
 	//ENTITY CLASS NAME
 	public static final String ENTITY_SERVER = "Server" ;
+	
+	public static final String NODE_SERVERS = "Servers" ;
+	public static final String NODE_SERVER_STATUS = "Status" ;
 
 }
