@@ -9,10 +9,10 @@ public final class NetUtil {
 	public static boolean isReachable(String addr) {
 		try {
 			InetAddress address = InetAddress.getByName(addr);
-			System.out.println("Name: " + address.getHostName());
-			System.out.println("Addr: " + address.getHostAddress());
-			System.out.println("Reach: " + address.isReachable(3000));
-			return true;
+//			System.out.println("Name: " + address.getHostName());
+//			System.out.println("Addr: " + address.getHostAddress());
+//			System.out.println("Reach: " + address.isReachable(3000));
+			return address.isReachable(3000);
 			
 		} catch (UnknownHostException e) {
 			System.err.println("Unable to lookup "+addr);

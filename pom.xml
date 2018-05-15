@@ -46,6 +46,12 @@
 			<artifactId>chukonu_redis</artifactId>
 			<version>1.0-SNAPSHOT</version>
 		</dependency>
+		
+		<dependency>
+			<groupId>com.yxy</groupId>
+			<artifactId>chukonu_docker</artifactId>
+			<version>1.0-SNAPSHOT</version>
+		</dependency>
 
 		<!-- Jetty -->
 		<dependency>

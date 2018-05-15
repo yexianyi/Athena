@@ -39,7 +39,14 @@ public final class Constants {
 	//ENTITY CLASS NAME
 	public static final String ENTITY_SERVER = "Server" ;
 	
-	public static final String NODE_SERVERS = "Servers" ;
+	public static final String NODE_SERVER_KEY = "NodeServer_" ;
+	public static final String NODE_SERVER_NAME_KEY = "server_name" ;
+	public static final String NODE_SERVER_ADDR_KEY = "server_addr" ;
+	public static final String NODE_SERVER_STATUS_KEY = "server_status" ;
+	public static final String NODE_SERVER_CPU_KEY = "server_cpu_percent" ;
+	public static final String NODE_SERVER_MEM_KEY = "server_mem_percent" ;
+	public static final String NODE_SERVER_CONTAINER_NUM_KEY = "server_container_num" ;
+	public static final String NODE_SERVER_COMMENT_KEY = "server_comment" ;
 	public static final String NODE_SERVER_STATUS = "Status" ;
 
 }

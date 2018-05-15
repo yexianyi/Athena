@@ -12,6 +12,9 @@ public class NodeServerEntity implements Serializable {
 	private String name ;
 	private String addr ;
 	private NodeServerState status ;
+	private float cpuUsage ;
+	private float memUsage ;
+	private int containerNum ;
 	private String comment ;
 
 }
