@@ -71,7 +71,7 @@ public class NodeServerService {
 				dao.saveUpdateHashMap(key, Constants.NODE_SERVER_CPU_KEY, "100");
 				dao.saveUpdateHashMap(key, Constants.NODE_SERVER_MEM_KEY, "100");
 				dao.saveUpdateHashMap(key, Constants.NODE_SERVER_CONTAINER_NUM_KEY, "100");
-				
+				dao.saveUpdateHashMap(key, Constants.NODE_SERVER_STATUS_KEY, NodeServerState.Healthy.toString());
 			}else {
 				//error log
 				dao.saveUpdateHashMap(key, Constants.NODE_SERVER_NAME_KEY, addr);
@@ -130,6 +130,27 @@ public class NodeServerService {
 		}
 		
 		return addrs ;
+	}
+	
+	
+	public Set<String> getAvailableServerAddrs() {
+		Set<String> addrs = new HashSet<String>() ;
+		Map<String, Map<String, String>> servers = getAllNodeServers() ;
+		Iterator<Map.Entry<String, Map<String, String>>> iter = servers.entrySet().iterator();
+		while (iter.hasNext()) {
+			Map.Entry<String, Map<String, String>> entry = iter.next();
+			Map<String, String> attrMap = entry.getValue() ;
+			if(!attrMap.get(Constants.NODE_SERVER_STATUS_KEY).equalsIgnoreCase(NodeServerState.Not_Reachable.toString())) {
+				addrs.add(attrMap.get(Constants.NODE_SERVER_ADDR_KEY)) ;
+			}
+		}
+		return addrs ;
+	}
+
+	
+	public boolean isHealthy(String addr) {
+		return dao.getHashMapValue(Constants.NODE_SERVER_KEY + addr, Constants.NODE_SERVER_STATUS_KEY)
+				.equalsIgnoreCase(NodeServerState.Healthy.toString());
 	}
 	
 }

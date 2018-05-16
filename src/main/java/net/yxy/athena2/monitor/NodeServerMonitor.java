@@ -29,10 +29,12 @@ public class NodeServerMonitor implements Runnable {
 		
 		while(!Thread.currentThread().isInterrupted() && !isShutdown) {
 			if(nss.isExistServer(connection.getHost())){
-				float currCpuUsage = ss.getHostCpuUsage() ;
-				nss.saveUpdateNodeServer(connection.getHost(), Constants.NODE_SERVER_CPU_KEY, currCpuUsage+"");
-				float currMemUsage = ss.getHostMemUsage() ;
-				nss.saveUpdateNodeServer(connection.getHost(), Constants.NODE_SERVER_MEM_KEY, currMemUsage+"");
+				if(nss.isHealthy(connection.getHost())) {
+					float currCpuUsage = ss.getHostCpuUsage() ;
+					nss.saveUpdateNodeServer(connection.getHost(), Constants.NODE_SERVER_CPU_KEY, currCpuUsage+"");
+					float currMemUsage = ss.getHostMemUsage() ;
+					nss.saveUpdateNodeServer(connection.getHost(), Constants.NODE_SERVER_MEM_KEY, currMemUsage+"");
+				}
 			}
 			
 			

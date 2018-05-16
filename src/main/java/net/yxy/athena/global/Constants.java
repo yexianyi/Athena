@@ -48,5 +48,6 @@ public final class Constants {
 	public static final String NODE_SERVER_CONTAINER_NUM_KEY = "server_container_num" ;
 	public static final String NODE_SERVER_COMMENT_KEY = "server_comment" ;
 	public static final String NODE_SERVER_STATUS = "Status" ;
+	public static final String DATA_SOURCE_KEY = "DS_";
 
 }
