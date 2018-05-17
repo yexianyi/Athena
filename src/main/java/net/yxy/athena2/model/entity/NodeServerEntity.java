@@ -1,20 +1,16 @@
 package net.yxy.athena2.model.entity;
 
-import java.io.Serializable;
-
 import lombok.AllArgsConstructor;
 import lombok.Data;
-import net.yxy.athena.global.NodeServerState;
+import net.yxy.athena.global.NodeServerRole;
 
 @Data @AllArgsConstructor
-public class NodeServerEntity implements Serializable {
+public class NodeServerEntity {
 	
 	private String name ;
 	private String addr ;
-	private NodeServerState status ;
-	private float cpuUsage ;
-	private float memUsage ;
-	private int containerNum ;
-	private String comment ;
+	private NodeServerRole role ;
+	private String port ;
+	private String cert ;
 
 }

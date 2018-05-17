@@ -3,7 +3,6 @@ package net.yxy.athena2.service;
 import java.util.HashSet;
 import java.util.Iterator;
 import java.util.Map;
-import java.util.Map.Entry;
 import java.util.Set;
 
 import com.yxy.chukonu.redis.model.dao.RedisDao;
@@ -11,6 +10,7 @@ import com.yxy.chukonu.redis.model.dao.RedisDao;
 import net.yxy.athena.global.Constants;
 import net.yxy.athena.global.NodeServerState;
 import net.yxy.athena.util.NetUtil;
+import net.yxy.athena2.model.entity.NodeServerEntity;
 
 public class NodeServerService {
 
@@ -60,13 +60,16 @@ public class NodeServerService {
 //	}
 	
 	
-	public void initNodeServerInfo(String[] addrs) {
-		for(String addr : addrs) {
-			String key = Constants.NODE_SERVER_KEY+addr ;
+	public void initNodeServerInfo(NodeServerEntity[] nodes) {
+		for(NodeServerEntity node : nodes) {
+			String key = Constants.NODE_SERVER_KEY+node.getAddr() ;
+			dao.saveUpdateHashMap(key, Constants.NODE_SERVER_NAME_KEY, node.getAddr());
+			dao.saveUpdateHashMap(key, Constants.NODE_SERVER_ADDR_KEY, node.getAddr());
+			dao.saveUpdateHashMap(key, Constants.NODE_SERVER_ROLE, node.getRole().toString());
+			dao.saveUpdateHashMap(key, Constants.NODE_SERVER_DOCKER_CLIENT_PORT, node.getPort());
+			dao.saveUpdateHashMap(key, Constants.NODE_SERVER_DOCKER_CLIENT_CERT, node.getCert());
 			//ping test
-			if(NetUtil.isReachable(addr)) {
-				dao.saveUpdateHashMap(key, Constants.NODE_SERVER_NAME_KEY, addr);
-				dao.saveUpdateHashMap(key, Constants.NODE_SERVER_ADDR_KEY, addr);
+			if(NetUtil.isReachable(node.getAddr())) {
 				dao.saveUpdateHashMap(key, Constants.NODE_SERVER_STATUS_KEY, NodeServerState.Reachable.toString());
 				dao.saveUpdateHashMap(key, Constants.NODE_SERVER_CPU_KEY, "100");
 				dao.saveUpdateHashMap(key, Constants.NODE_SERVER_MEM_KEY, "100");
@@ -74,8 +77,6 @@ public class NodeServerService {
 				dao.saveUpdateHashMap(key, Constants.NODE_SERVER_STATUS_KEY, NodeServerState.Healthy.toString());
 			}else {
 				//error log
-				dao.saveUpdateHashMap(key, Constants.NODE_SERVER_NAME_KEY, addr);
-				dao.saveUpdateHashMap(key, Constants.NODE_SERVER_ADDR_KEY, addr);
 				dao.saveUpdateHashMap(key, Constants.NODE_SERVER_STATUS_KEY, NodeServerState.Not_Reachable.toString());
 				dao.saveUpdateHashMap(key, Constants.NODE_SERVER_CPU_KEY, "0");
 				dao.saveUpdateHashMap(key, Constants.NODE_SERVER_MEM_KEY, "0");

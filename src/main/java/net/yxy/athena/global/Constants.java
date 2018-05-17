@@ -42,6 +42,9 @@ public final class Constants {
 	public static final String NODE_SERVER_KEY = "NodeServer_" ;
 	public static final String NODE_SERVER_NAME_KEY = "server_name" ;
 	public static final String NODE_SERVER_ADDR_KEY = "server_addr" ;
+	public static final String NODE_SERVER_ROLE = "server_role";
+	public static final String NODE_SERVER_DOCKER_CLIENT_PORT = "server_docker_client_port";
+	public static final String NODE_SERVER_DOCKER_CLIENT_CERT = "server_docker_client_cert";
 	public static final String NODE_SERVER_STATUS_KEY = "server_status" ;
 	public static final String NODE_SERVER_CPU_KEY = "server_cpu_percent" ;
 	public static final String NODE_SERVER_MEM_KEY = "server_mem_percent" ;
@@ -49,5 +52,6 @@ public final class Constants {
 	public static final String NODE_SERVER_COMMENT_KEY = "server_comment" ;
 	public static final String NODE_SERVER_STATUS = "Status" ;
 	public static final String DATA_SOURCE_KEY = "DS_";
+	public static final String DATA_SOURCE_TYPE_MYSQL = "MySQL";
 
 }

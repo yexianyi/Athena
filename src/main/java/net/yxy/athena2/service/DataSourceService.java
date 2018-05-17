@@ -25,11 +25,22 @@ public class DataSourceService {
 	 * @param dsType
 	 * @param connMap
 	 */
-	private void handleConnectionRequest(String dsName, String dsType, Map<String, String> connMap) {
+	public void handleConnectionRequest(String dsName, String dsType, Map<String, String> connMap) {
+		//1.check if any existing Node Server Candidates for current datasource
+		if(!isExistNodeServerListForDS(dsName)) {
+			initNodeServerCandidates(dsName, dsType, connMap) ;
+		}
+		
+		String serverAddr = findBestNodeServer(dsName) ;
+		runTask(serverAddr, dsName, dsType, connMap) ;
+	}
+	
+	private boolean isExistNodeServerListForDS(String dsName) {
+		return dao.isExistSortedSet(Constants.DATA_SOURCE_KEY+dsName) ;
 	}
 	
 	
-	public void initNodeServerCandidates(String dsName, String dsType, Map<String, String> connMap) {
+	private void initNodeServerCandidates(String dsName, String dsType, Map<String, String> connMap) {
 		Set<String> nodeServerAddrs = nss.getAvailableServerAddrs() ;
 		for(String addr : nodeServerAddrs) {
 			//TODO: send rest request to each node server to get delay duration.
@@ -40,7 +51,7 @@ public class DataSourceService {
 		
 	}
 	
-	public void saveAndUpdateDSNodeServerList(String dsName, float delay, String addr) {
+	private void saveAndUpdateDSNodeServerList(String dsName, float delay, String addr) {
 		dao.insertSortedSet(Constants.DATA_SOURCE_KEY+dsName, delay, addr);
 	}
 	
@@ -54,19 +65,20 @@ public class DataSourceService {
 	 * @param dsName
 	 * @return
 	 */
-	public String findBestNodeServer(String dsName) {
+	private String findBestNodeServer(String dsName) {
 		Set<Tuple> candidates = dao.getSortedSetWithScore(Constants.DATA_SOURCE_KEY+dsName) ;
 		float delaySum = 0.0f ;
 		int count = 0 ;
 		for(Tuple server:candidates) {
 			count++ ;
 			delaySum += server.getScore() ;
-			DockerConnection conn = new DockerConnection(server.getElement(), "2376", null) ;
+			
+			DockerConnection conn = getDokcerConnection(server.getElement()) ;
 			ss = new SystemService(conn) ;
 			//get total cpu usage percent of current server
 			float cpuPer = ss.getHostCpuUsage() ;
 			try {
-				if(cpuPer<0.98f) { //if has enough capability, allocate task to this server
+				if(cpuPer<0.98f) { //if has enough capability, assign task to this server
 					return server.getElement() ;
 				}else {//no enough capability, try next server
 					continue ;
@@ -77,6 +89,11 @@ public class DataSourceService {
 		}
 		
 		return getSuboptimalNodeServer(dsName, candidates, delaySum/count);
+	}
+
+	private DockerConnection getDokcerConnection(String sName) {
+		Map<String, String> attrs = nss.getServerByName(sName) ;
+		return new DockerConnection(attrs.get(Constants.NODE_SERVER_ADDR_KEY), attrs.get(Constants.NODE_SERVER_DOCKER_CLIENT_PORT), attrs.get(Constants.NODE_SERVER_DOCKER_CLIENT_CERT));
 	}
 
 	private String getSuboptimalNodeServer(String dsName, Set<Tuple> servers, float avg) {
@@ -99,8 +116,9 @@ public class DataSourceService {
 
 	
 	
-	private void runTask(String dsName, String dsType, Map<String, String> connMap) {
+	private boolean runTask(String targetHost, String dsName, String dsType, Map<String, String> connMap) {
 //		swarm = new SwarmService(null) ;
-		
+		System.out.println(dsName+":"+targetHost+"|"+dsType) ;
+		return true ;
 	}
 }
