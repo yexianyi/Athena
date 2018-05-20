@@ -50,8 +50,13 @@ public final class Constants {
 	public static final String NODE_SERVER_MEM_KEY = "server_mem_percent" ;
 	public static final String NODE_SERVER_CONTAINER_NUM_KEY = "server_container_num" ;
 	public static final String NODE_SERVER_COMMENT_KEY = "server_comment" ;
-	public static final String NODE_SERVER_STATUS = "Status" ;
-	public static final String DATA_SOURCE_KEY = "DS_";
+	public static final String NODE_SERVER_STATUS = "status" ;
+	public static final String DATA_SOURCE_KEY = "DataSource_";
 	public static final String DATA_SOURCE_TYPE_MYSQL = "MySQL";
+	public static final String DATA_SOURCE_INFO_KEY = "DataSourceInfo_";
+	public static final String DATA_SOURCE_ERROR_KEY = "error";
+	public static final String DATA_SOURCE_SERVICE_NAME = "service_name";
+	public static final String DATA_SOURCE_SERVICE_STATUS = "service_status";
+	public static final String DATA_SOURCE_SERVICE_ID = "service_id";
 
 }

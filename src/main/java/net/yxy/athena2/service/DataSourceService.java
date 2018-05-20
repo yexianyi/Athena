@@ -8,6 +8,7 @@ import com.yxy.chukonu.docker.service.SwarmService;
 import com.yxy.chukonu.docker.service.SystemService;
 import com.yxy.chukonu.redis.model.dao.RedisDao;
 
+import net.yxy.athena.db.DataSourceStatus;
 import net.yxy.athena.global.Constants;
 import net.yxy.athena.util.MathUtil;
 import redis.clients.jedis.Tuple;
@@ -117,8 +118,40 @@ public class DataSourceService {
 	
 	
 	private boolean runTask(String targetHost, String dsName, String dsType, Map<String, String> connMap) {
-//		swarm = new SwarmService(null) ;
-		System.out.println(dsName+":"+targetHost+"|"+dsType) ;
+		updateDSStatus(dsName, Constants.DATA_SOURCE_SERVICE_NAME, dsName) ;
+		updateDSStatus(dsName, Constants.DATA_SOURCE_SERVICE_STATUS, DataSourceStatus.PLANNING.toString()) ;
+		
+		try {
+			System.out.println(dsName+":"+targetHost+"|"+dsType) ;
+			DockerConnection conn = getDokcerConnection(targetHost) ;
+			SwarmService swarm = new SwarmService(conn) ;
+			String serviceId = swarm.createService(dsName, targetHost, getImageName(dsType)) ;
+			updateDSStatus(dsName, Constants.DATA_SOURCE_SERVICE_ID, serviceId) ;
+		} catch (Exception e) {
+			e.printStackTrace();
+			updateDSStatus(dsName, Constants.DATA_SOURCE_ERROR_KEY, e.getMessage()) ;
+			return false ;
+		}
+		updateDSStatus(dsName, Constants.DATA_SOURCE_SERVICE_STATUS, DataSourceStatus.CREATING.toString()) ;
 		return true ;
+	}
+	
+
+	private void updateDSStatus(String dsName, String key, String value) {
+		dao.saveUpdateHashMap(Constants.DATA_SOURCE_INFO_KEY+dsName, key, value);
+	}
+	
+
+	/**
+	 * This function is simulating the process of getting docker image name in terms of datasource type.
+	 * @param dsType
+	 * @return
+	 */
+	private String getImageName(String dsType) {
+		String imgName = "" ;
+		switch(dsType) {
+			default: imgName = "tomcat:7" ;
+		}
+		return imgName;
 	}
 }
