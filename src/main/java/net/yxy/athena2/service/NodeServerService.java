@@ -60,7 +60,7 @@ public class NodeServerService {
 //	}
 	
 	
-	public void initNodeServerInfo(NodeServerEntity[] nodes) {
+	public void addNodeServersInfo(NodeServerEntity[] nodes) {
 		for(NodeServerEntity node : nodes) {
 			String key = Constants.NODE_SERVER_KEY+node.getAddr() ;
 			dao.saveUpdateHashMap(key, Constants.NODE_SERVER_NAME_KEY, node.getAddr());
@@ -125,7 +125,7 @@ public class NodeServerService {
 	
 	public Set<String> getAllServerAddrs() {
 		Set<String> addrs = new HashSet<String>() ;
-		Set<String> nodeKeys = dao.getHashMapKeys(Constants.NODE_SERVER_KEY+"*") ;
+		Set<String> nodeKeys = dao.getKeys(Constants.NODE_SERVER_KEY+"*") ;
 		for(String key:nodeKeys) {
 			addrs.add(key.replace(Constants.NODE_SERVER_KEY, "")) ;
 		}
@@ -146,6 +146,11 @@ public class NodeServerService {
 			}
 		}
 		return addrs ;
+	}
+	
+	
+	public void removeNodeServer(String name) {
+		dao.removeRecord(Constants.NODE_SERVER_KEY+name) ;
 	}
 
 	

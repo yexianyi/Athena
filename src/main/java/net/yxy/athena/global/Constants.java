@@ -39,6 +39,8 @@ public final class Constants {
 	//ENTITY CLASS NAME
 	public static final String ENTITY_SERVER = "Server" ;
 	
+	
+	public static final String CONSUL_SERVER = "192.168.1.15" ;
 	public static final String NODE_SERVER_KEY = "NodeServer_" ;
 	public static final String NODE_SERVER_NAME_KEY = "server_name" ;
 	public static final String NODE_SERVER_ADDR_KEY = "server_addr" ;

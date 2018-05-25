@@ -1,5 +1,6 @@
 package net.yxy.athena2.service;
 
+import java.util.Arrays;
 import java.util.Map;
 import java.util.Set;
 
@@ -55,6 +56,17 @@ public class DataSourceService {
 	private void saveAndUpdateDSNodeServerList(String dsName, float delay, String addr) {
 		dao.insertSortedSet(Constants.DATA_SOURCE_KEY+dsName, delay, addr);
 	}
+	
+	
+	public void removeNodeServerFromDSNodeServerList(String dsName, String addr) {
+		dao.removeRecord(Constants.DATA_SOURCE_KEY+dsName, addr) ;
+	}
+	
+	
+	public Set<String> getAllDataSourceNames() {
+		return dao.getKeys(Constants.DATA_SOURCE_KEY) ;
+	}
+	
 	
 	/**
 	 * Choose best node server to be set up container
@@ -125,7 +137,7 @@ public class DataSourceService {
 			System.out.println(dsName+":"+targetHost+"|"+dsType) ;
 			DockerConnection conn = getDokcerConnection(targetHost) ;
 			SwarmService swarm = new SwarmService(conn) ;
-			String serviceId = swarm.createService(dsName, targetHost, getImageName(dsType)) ;
+			String serviceId = swarm.createService(dsName, targetHost, getImageName(dsType), Arrays.asList("CONSUL_AGENT="+Constants.CONSUL_SERVER)) ;
 			updateDSStatus(dsName, Constants.DATA_SOURCE_SERVICE_ID, serviceId) ;
 		} catch (Exception e) {
 			e.printStackTrace();

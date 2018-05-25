@@ -30,14 +30,14 @@ public class DataSourceServiceTest extends BaseTest{
 	@Test
 	public void Test1InitNodeServerInfo() {
 		NodeServerEntity[] servers = {host1, host2, host3} ;
-		nss.initNodeServerInfo(servers);
+		nss.addNodeServersInfo(servers);
 		
 	}
 	
 	@Test
 	public void test2HandleConnectionRequest() {
 		NodeServerEntity[] servers = {host1, host2, host3} ;
-		nss.initNodeServerInfo(servers);
+		nss.addNodeServersInfo(servers);
 		dss.handleConnectionRequest("mysql", Constants.DATA_SOURCE_TYPE_MYSQL, null);
 		
 	}

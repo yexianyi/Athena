@@ -30,7 +30,7 @@ public class NodeServerServiceTest extends BaseTest{
 	@Test
 	public void testInitNodeServer() {
 		NodeServerEntity[] servers = {host1, host2, host3} ;
-		nss.initNodeServerInfo(servers);
+		nss.addNodeServersInfo(servers);
 		
 		Map<String, Map<String, String>> res =  nss.getAllNodeServers() ;
 		assertEquals(servers.length, res.size()) ;
@@ -44,7 +44,7 @@ public class NodeServerServiceTest extends BaseTest{
 	@Test
 	public void testGetNodeServer() {
 		NodeServerEntity[] servers = {host1, host2, host3} ;
-		nss.initNodeServerInfo(servers);
+		nss.addNodeServersInfo(servers);
 		
 		assertEquals("192.168.99.101", nss.getServerByName("192.168.99.101").get(Constants.NODE_SERVER_ADDR_KEY));
 		assertNull(nss.getServerByName("192.168.99.104"));
@@ -55,7 +55,7 @@ public class NodeServerServiceTest extends BaseTest{
 	@Test
 	public void testGetAllNodeServerAddrs() {
 		NodeServerEntity[] servers = {host1, host2, host3} ;
-		nss.initNodeServerInfo(servers);
+		nss.addNodeServersInfo(servers);
 		Set<String> addrs = nss.getAllServerAddrs() ;
 		assertEquals(servers.length, addrs.size());
 		for(NodeServerEntity add:servers) {
@@ -67,7 +67,7 @@ public class NodeServerServiceTest extends BaseTest{
 	@Test
 	public void testGetAvilableNodeServer() {
 		NodeServerEntity[] servers = {host1, host2, host3} ;
-		nss.initNodeServerInfo(servers);
+		nss.addNodeServersInfo(servers);
 		Map<String, Map<String, String>> availServers = nss.getAvailableNodeServers() ;
 		assertEquals(servers.length, availServers.size());
 		
