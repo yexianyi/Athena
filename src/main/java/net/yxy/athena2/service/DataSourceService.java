@@ -32,7 +32,7 @@ public class DataSourceService {
 	 * @param connMap
 	 */
 	@Async
-	public void handleConnectionRequest(String dsName, String dsType, Map<String, String> connMap) {
+	public void createDataSource(String dsName, String dsType, Map<String, String> connMap) {
 		//1.check if any existing Node Server Candidates for current datasource
 		if(!isExistNodeServerListForDS(dsName)) {
 			initNodeServerCandidates(dsName, dsType, connMap) ;

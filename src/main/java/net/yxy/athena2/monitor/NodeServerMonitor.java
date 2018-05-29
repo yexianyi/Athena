@@ -6,11 +6,10 @@ import java.util.Map;
 import java.util.Map.Entry;
 import java.util.Set;
 
-import javax.annotation.Resource;
-
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.DisposableBean;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
 import com.orbitz.consul.Consul;
@@ -19,7 +18,6 @@ import com.orbitz.consul.cache.NodesCatalogCache;
 import com.orbitz.consul.model.health.Node;
 import com.orbitz.consul.option.QueryOptions;
 
-import net.yxy.athena.global.Constants;
 import net.yxy.athena.global.NodeServerRole;
 import net.yxy.athena2.model.entity.NodeServerEntity;
 import net.yxy.athena2.service.DataSourceService;
@@ -29,10 +27,10 @@ import net.yxy.athena2.service.NodeServerService;
 public class NodeServerMonitor implements DisposableBean, Runnable{
 	private final Logger logger = LoggerFactory.getLogger(NodeServerMonitor.class);
 	
-	@Resource
+	@Autowired
 	private NodeServerService nss ;
 	
-	@Resource
+	@Autowired
 	private DataSourceService dss ;
 	
 	private Consul consul ;
