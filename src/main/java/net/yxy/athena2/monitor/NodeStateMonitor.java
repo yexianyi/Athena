@@ -3,6 +3,11 @@ package net.yxy.athena2.monitor;
 import java.util.Map;
 import java.util.Map.Entry;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.DisposableBean;
+import org.springframework.stereotype.Component;
+
 import com.orbitz.consul.Consul;
 import com.orbitz.consul.cache.ConsulCache;
 import com.orbitz.consul.cache.KVCache;
@@ -14,15 +19,19 @@ import com.yxy.chukonu.docker.service.SystemService;
 
 import net.yxy.athena2.service.NodeServerService;
 
-public class Launcher  {
+public class NodeStateMonitor implements DisposableBean, Runnable {
+	private final Logger logger = LoggerFactory.getLogger(NodeStateMonitor.class);
 	
 	private SystemService ss ;
 	private NodeServerService nss = new NodeServerService() ;
 	private volatile static boolean isShutdown = false ;
 	
-	public Launcher() {
-	}
+	private Thread thread;
 
+    public NodeStateMonitor(){
+        this.thread = new Thread(this);
+        this.thread.start();
+    }
 	
 	private static void watchKVEvents(Consul consul) {
 		KVCache kvCache = KVCache.newCache(consul.keyValueClient(), "test", 5); 
@@ -38,6 +47,7 @@ public class Launcher  {
 	}
 
 	
+	@Deprecated
 	private void watchServiceEvents(Consul consul) {
 		String serviceName = "MySQL_datasource";
 		ServiceHealthCache svHealth = ServiceHealthCache.newCache(consul.healthClient(), serviceName);
@@ -55,12 +65,10 @@ public class Launcher  {
 	}
 	
 	
-	public void start() {
+
+	@Override
+	public void run() {
 		Consul consul = Consul.builder().build(); // connect to Consul on localhost
-		NodeServerMonitor monitor = new NodeServerMonitor(consul) ;
-		monitor.start();
-		ServiceMonitor sMonitor = new ServiceMonitor(consul) ;
-		sMonitor.start();
 		//watchKVEvents(consul) ;
 		//TODO: need to think about how to monitor multi-docker machine with one single thread.
 		NodeStateSynchronizer synchronizer = new NodeStateSynchronizer(null) ;
@@ -72,11 +80,14 @@ public class Launcher  {
 				e.printStackTrace();
 			}
 		}
+		
 	}
 
-	
-	public static void main(String[] args) {
 
+	@Override
+	public void destroy() throws Exception {
+		// TODO Auto-generated method stub
+		
 	}
 
 }

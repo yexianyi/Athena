@@ -1,12 +1,17 @@
 package net.yxy.athena2.monitor;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.DisposableBean;
+
 import com.yxy.chukonu.docker.client.conn.DockerConnection;
 import com.yxy.chukonu.docker.service.SystemService;
 
 import net.yxy.athena.global.Constants;
 import net.yxy.athena2.service.NodeServerService;
 
-public class NodeStateSynchronizer extends Thread {
+public class NodeStateSynchronizer implements DisposableBean, Runnable {
+	private final Logger logger = LoggerFactory.getLogger(NodeStateSynchronizer.class);
 	
 	private DockerConnection connection ;
 	private SystemService ss ;
@@ -34,7 +39,7 @@ public class NodeStateSynchronizer extends Thread {
 			
 			
 			try {
-				Thread.sleep(5000);
+				Thread.sleep(Constants.SYN_INTERVAL);
 			} catch (InterruptedException e) {
 				e.printStackTrace();
 			}
@@ -48,8 +53,12 @@ public class NodeStateSynchronizer extends Thread {
 		connection.close();
 	}
 
-	public static void main(String[] args) {
 
+
+	@Override
+	public void destroy() throws Exception {
+		// TODO Auto-generated method stub
+		
 	}
 
 }

@@ -5,6 +5,8 @@ import java.util.Iterator;
 import java.util.Map;
 import java.util.Set;
 
+import org.springframework.stereotype.Service;
+
 import com.yxy.chukonu.redis.model.dao.RedisDao;
 
 import net.yxy.athena.global.Constants;
@@ -12,6 +14,7 @@ import net.yxy.athena.global.NodeServerState;
 import net.yxy.athena.util.NetUtil;
 import net.yxy.athena2.model.entity.NodeServerEntity;
 
+@Service
 public class NodeServerService {
 
 	private RedisDao dao = new RedisDao() ;

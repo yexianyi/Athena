@@ -4,6 +4,9 @@ import java.util.Arrays;
 import java.util.Map;
 import java.util.Set;
 
+import org.springframework.scheduling.annotation.Async;
+import org.springframework.stereotype.Service;
+
 import com.yxy.chukonu.docker.client.conn.DockerConnection;
 import com.yxy.chukonu.docker.service.SwarmService;
 import com.yxy.chukonu.docker.service.SystemService;
@@ -14,6 +17,7 @@ import net.yxy.athena.global.Constants;
 import net.yxy.athena.util.MathUtil;
 import redis.clients.jedis.Tuple;
 
+@Service
 public class DataSourceService {
 	private SwarmService swarm ;
 	private SystemService ss ;
@@ -27,6 +31,7 @@ public class DataSourceService {
 	 * @param dsType
 	 * @param connMap
 	 */
+	@Async
 	public void handleConnectionRequest(String dsName, String dsType, Map<String, String> connMap) {
 		//1.check if any existing Node Server Candidates for current datasource
 		if(!isExistNodeServerListForDS(dsName)) {
