@@ -30,7 +30,7 @@ public class DataSourceController {
 
 	
 	@GetMapping("/handle")
-	public WebAsyncTask<String> handleRequest(String dsName, String dsType, Map<String, String>connMap) {
+	public WebAsyncTask<String> createDataSourceService(String dsName, String dsType, Map<String, String>connMap) {
 		logger.info("handleRequest:"+dsName+" | dsType="+dsType);
 		WebAsyncTask<String> webAsyncTask = new WebAsyncTask<>(10000, new Callable<String>() {
 			@Override

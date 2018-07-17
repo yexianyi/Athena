@@ -38,7 +38,7 @@ public class DataSourceServiceTest extends BaseTest{
 	public void test2HandleConnectionRequest() {
 		NodeServerEntity[] servers = {host1, host2, host3} ;
 		nss.addNodeServersInfo(servers);
-		dss.handleConnectionRequest("mysql", Constants.DATA_SOURCE_TYPE_MYSQL, null);
+		dss.createDataSource("mysql", Constants.DATA_SOURCE_TYPE_MYSQL, null);
 		
 	}
 	
